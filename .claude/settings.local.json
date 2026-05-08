@@ -1,0 +1,8 @@
+{
+  "claudeMdExcludes": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/*.log",
+    ".env"
+  ]
+}
