@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tytan Agriculture — Precisão que movimenta a safra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="colors_and_type.css" />
+<style>
+  :root{
+    --bg:#0b0d0c;
+    --ink:#0b0d0c;
+    --ink-2:#1a1d1c;
+    --paper:#f5f3ee;
+    --paper-2:#eceae3;
+    --line:#22262a;
+    --line-soft:#cfd0c8;
+    --green:#003215;
+    --green-700:#004b23;
+    --green-300:#79bb87;
+    --green-100:#aef2bb;
+    --copper:#d97706;
+    --copper-2:#f08a14;
+    --copper-d:#b75f00;
+    --r:.25rem;
+    --r-lg:.5rem;
+    --container:1320px;
+    --mono:'JetBrains Mono', ui-monospace, monospace;
+    /* --display & --body inherited from colors_and_type.css (DM Sans variable) */
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;text-wrap:pretty;}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:0;background:transparent;color:inherit}
+  ::selection{background:var(--copper);color:#fff}
+  .container{max-width:var(--container);margin:0 auto;padding:0 32px}
+  @media(max-width:640px){.container{padding:0 20px}}
+
+  /* ═════ TYPE ═════ */
+  .display{font-family:var(--display);font-weight:800;letter-spacing:-.035em;line-height:.92;text-transform:uppercase}
+  .h1{font-size:clamp(64px, 11vw, 184px);}
+  .h2{font-size:clamp(44px, 7vw, 112px);}
+  .h3{font-family:var(--display);font-weight:800;font-size:clamp(28px,3.6vw,56px);line-height:.98;letter-spacing:-.02em;text-transform:uppercase}
+  .lede{font-family:var(--body);font-size:clamp(16px,1.25vw,20px);line-height:1.5;font-weight:300;color:rgba(11,13,12,.78)}
+  .eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase}
+  .label{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:rgba(11,13,12,.55)}
+  .meta{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+
+  /* ═════ HEADER ═════ */
+  header.site{position:fixed;top:0;left:0;right:0;z-index:80}
+  header.site::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,13,12,.55) 0%, rgba(11,13,12,0) 100%);pointer-events:none}
+  header.site .row{position:relative;display:flex;align-items:center;justify-content:space-between;height:80px;color:#f5f3ee}
+  .brand{display:inline-flex;align-items:center;height:42px}
+  .brand img{height:36px;width:auto;display:block}
+  .brand--light img{filter:brightness(0) invert(1)}
+  .nav-c{display:flex;gap:34px}
+  .nav-c a{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:#f5f3ee;opacity:.85}
+  .nav-c a:hover{opacity:1}
+  @media(max-width:880px){.nav-c{display:none}}
+  .head-cta{display:flex;align-items:center;gap:18px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+  .head-cta .pill{padding:9px 14px;border:1px solid currentColor;border-radius:9999px}
+  .head-cta .pill:hover{background:#f5f3ee;color:var(--ink)}
+
+  /* ═════ HERO ═════ */
+  .hero{position:relative;min-height:100vh;background:#0a0b09;color:#f5f3ee;overflow:hidden;isolation:isolate}
+  .hero .bg{position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(120% 80% at 60% 35%, rgba(217,119,6,.42), transparent 55%),
+      radial-gradient(120% 80% at 80% 80%, rgba(255, 158, 41,.30), transparent 60%),
+      linear-gradient(180deg, #0a0b09 0%, #160e07 60%, #0a0b09 100%);
+  }
+  .hero .photo{position:absolute;inset:0;z-index:1;background:url('assets/sprayer-action.png') center 55%/cover no-repeat;mix-blend-mode:screen;opacity:.78;filter:contrast(1.05) saturate(1.05)}
+  .hero .haze{position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(10,11,9,.55) 0%, rgba(10,11,9,.15) 35%, rgba(10,11,9,.05) 60%, rgba(10,11,9,.85) 100%)}
+  .hero .grid{position:absolute;inset:0;z-index:3;pointer-events:none;
+    background-image:
+      linear-gradient(0deg, rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size:96px 96px;
+  }
+  .hero .dust{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.4;mix-blend-mode:screen;
+    background-image:radial-gradient(rgba(255,210,150,.55) 1px, transparent 1.5px);
+    background-size:9px 9px;
+    animation:drift 18s linear infinite;
+  }
+  @keyframes drift{from{background-position:0 0}to{background-position:240px -300px}}
+
+  .hero .frame{position:relative;z-index:10;min-height:100vh;display:grid;grid-template-rows:80px 1fr auto;}
+  .hero .stage{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;padding:32px 0 24px;align-items:end}
+  @media(max-width:980px){.hero .stage{grid-template-columns:1fr;gap:24px}}
+
+  .hero .badge-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:32px;align-items:center}
+  .hero .badge-row span{padding:7px 11px;border:1px solid rgba(245,243,238,.25);border-radius:9999px;font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#f5f3ee}
+  .hero .badge-row .live{background:var(--copper);border-color:var(--copper);color:#0b0d0c;font-weight:700}
+  .hero .badge-row .live::before{content:"";width:6px;height:6px;border-radius:50%;background:#0b0d0c;display:inline-block;margin-right:8px;vertical-align:middle;animation:bk 1.4s infinite}
+  @keyframes bk{50%{opacity:.3}}
+
+  .hero h1.h1{margin:0;color:#f5f3ee}
+  .hero h1.h1 .ink{display:inline-block}
+  .hero h1.h1 em{font-style:normal;color:var(--copper);font-style:italic;font-weight:900}
+  .hero h1.h1 .stk{-webkit-text-stroke:1.5px #f5f3ee;color:transparent}
+
+  .hero .sub{display:grid;grid-template-columns:1fr;gap:28px;margin-top:36px;max-width:560px}
+  .hero .sub .lede{color:rgba(245,243,238,.84)}
+  .hero .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+  .btn{display:inline-flex;align-items:center;gap:14px;padding:18px 26px;border-radius:0;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;transition:.18s ease;border:1.5px solid transparent}
+  .btn .arr{width:14px;height:14px;transition:transform .25s}
+  .btn:hover .arr{transform:translateX(4px)}
+  .btn-primary{background:var(--copper);color:#0b0d0c;border-color:var(--copper)}
+  .btn-primary:hover{background:var(--copper-2);border-color:var(--copper-2)}
+  .btn-ghost{background:transparent;color:#f5f3ee;border-color:rgba(245,243,238,.5)}
+  .btn-ghost:hover{background:#f5f3ee;color:#0b0d0c}
+  .btn-ink{background:var(--ink);color:#f5f3ee;border-color:var(--ink)}
+  .btn-ink:hover{background:var(--copper);border-color:var(--copper);color:#0b0d0c}
+  .btn-outline-ink{background:transparent;color:var(--ink);border-color:var(--ink)}
+  .btn-outline-ink:hover{background:var(--ink);color:#f5f3ee}
+
+  /* hero floating cards */
+  .hero .stat-strip{position:relative;height:100%;min-height:520px}
+  @media(max-width:980px){.hero .stat-strip{min-height:340px}}
+  .hcard{position:absolute;background:rgba(245,243,238,.05);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(245,243,238,.18);padding:18px 20px;color:#f5f3ee;animation:float 6s ease-in-out infinite}
+  .hcard.b{animation-delay:-2s}
+  .hcard.c{animation-delay:-4s}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .hcard .lab{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,243,238,.62)}
+  .hcard .val{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:-.01em;line-height:1;margin-top:6px}
+  .hcard .val em{font-style:normal;color:var(--copper)}
+  .hcard.a{top:8%;right:18%;width:200px}
+  .hcard.b{top:34%;right:2%;width:240px}
+  .hcard.c{bottom:12%;right:30%;width:180px}
+  .hcard.d{bottom:30%;right:6%;width:230px;background:var(--copper);border-color:var(--copper);color:#0b0d0c}
+  .hcard.d .lab{color:rgba(11,13,12,.7)}
+
+  .hero .ticker{border-top:1px solid rgba(245,243,238,.18);border-bottom:1px solid rgba(245,243,238,.18);padding:18px 0;display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  @media(max-width:880px){.hero .ticker{grid-template-columns:repeat(2,1fr)}}
+  .hero .ticker .c{display:flex;flex-direction:column;gap:4px;padding:0 24px;border-right:1px solid rgba(245,243,238,.18)}
+  .hero .ticker .c:last-child{border-right:0}
+  .hero .ticker .v{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.01em}
+  .hero .ticker .v em{font-style:normal;color:var(--copper)}
+  .hero .ticker .l{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,243,238,.62)}
+
+  .hero .scrolldown{position:absolute;bottom:18px;left:32px;z-index:11;font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,243,238,.7);display:flex;align-items:center;gap:10px}
+  .hero .scrolldown::before{content:"";width:1px;height:36px;background:rgba(245,243,238,.4);animation:scroll 1.6s ease-in-out infinite}
+  @keyframes scroll{0%{transform:scaleY(.2);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+  /* ═════ MARQUEE ═════ */
+  .marquee{background:var(--ink);color:var(--paper);overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .marquee .track{display:flex;gap:64px;padding:22px 0;white-space:nowrap;animation:tick 40s linear infinite;font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:.02em;text-transform:uppercase}
+  .marquee .track span{display:inline-flex;align-items:center;gap:64px}
+  .marquee .track i{font-style:normal;color:var(--copper)}
+  .marquee .dot{width:8px;height:8px;background:var(--copper);display:inline-block;border-radius:50%}
+  @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ═════ SECTION CHROME ═════ */
+  section{padding:140px 0;position:relative}
+  @media(max-width:880px){section{padding:88px 0}}
+  .secnum{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:64px}
+  .secnum .l{display:flex;align-items:flex-end;gap:28px}
+  .secnum .num{font-family:var(--display);font-weight:800;font-size:96px;line-height:.85;letter-spacing:-.02em;color:var(--ink);opacity:.08}
+  .secnum .ttl{max-width:780px}
+  .secnum .ttl .eyebrow{display:flex;align-items:center;gap:12px;color:var(--copper);margin-bottom:14px}
+  .secnum .ttl .eyebrow::before{content:"";width:32px;height:1.5px;background:var(--copper)}
+  .secnum .ttl h2{margin:0;color:var(--ink)}
+  .secnum .r{align-self:flex-end;display:flex;gap:10px}
+  @media(max-width:880px){.secnum{flex-direction:column;align-items:flex-start;gap:18px;margin-bottom:40px}.secnum .num{display:none}}
+
+  /* ═════ CALCULATOR ═════ */
+  .calc{background:var(--ink);color:var(--paper);position:relative;overflow:hidden}
+  .calc::before{content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(0deg, rgba(245,243,238,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,243,238,.04) 1px, transparent 1px);
+    background-size:96px 96px;pointer-events:none}
+  .calc .secnum .num{color:var(--paper);opacity:.06}
+  .calc .secnum .ttl h2{color:var(--paper)}
+  .calc .secnum .ttl .eyebrow{color:var(--copper)}
+  .calc-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:48px;align-items:start;position:relative;z-index:2}
+  @media(max-width:980px){.calc-grid{grid-template-columns:1fr;gap:32px}}
+
+  .calc .left h2 .stk{-webkit-text-stroke:1.5px var(--paper);color:transparent}
+  .calc .left .lede{color:rgba(245,243,238,.7);max-width:540px;margin:24px 0 36px}
+
+  .steps{display:grid;gap:0;border-top:1px solid rgba(245,243,238,.18)}
+  .steps .step{padding:22px 0;border-bottom:1px solid rgba(245,243,238,.18);display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;transition:.2s}
+  .steps .step .n{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:rgba(245,243,238,.5)}
+  .steps .step .t{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.01em;text-transform:uppercase}
+  .steps .step .d{display:none}
+  .steps .step .x{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,243,238,.45)}
+  .steps .step.on .n{color:var(--copper)}
+  .steps .step.on .x{color:var(--copper)}
+
+  .panel{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:0}
+  .panel .head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line-soft);background:var(--paper-2)}
+  .panel .head .pill{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);background:var(--paper);border:1px solid var(--line-soft);padding:6px 9px}
+  .panel .head .ind{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(11,13,12,.6);display:inline-flex;align-items:center;gap:8px}
+  .panel .head .ind .d{width:8px;height:8px;border-radius:50%;background:var(--copper);animation:bk 1.6s infinite}
+  .panel .body{padding:28px}
+
+  .field{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+  .field label{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:rgba(11,13,12,.65)}
+  .field input,.field select{font:inherit;font-size:15px;padding:13px 14px;border:1px solid var(--line-soft);border-radius:0;background:var(--paper);color:var(--ink);transition:.15s}
+  .field input:focus,.field select:focus{outline:0;border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line-soft)}
+  .seg button{padding:12px 8px;background:var(--paper);font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(11,13,12,.65);border-right:1px solid var(--line-soft);transition:.15s}
+  .seg button:last-child{border-right:0}
+  .seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .slider-row .top{display:flex;justify-content:space-between;align-items:baseline}
+  .slider-row .v{font-family:var(--display);font-weight:800;font-size:20px;letter-spacing:-.01em}
+  .slider-row input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--line-soft);border-radius:0}
+  .slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:0;background:var(--copper);border:2px solid var(--paper);cursor:pointer;box-shadow:0 0 0 1px var(--ink)}
+  .slider-row input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:0;background:var(--copper);border:2px solid var(--paper);cursor:pointer}
+
+  .gauges{margin-top:8px;border-top:1px dashed var(--line-soft);padding-top:22px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .gauge{background:var(--paper-2);border:1px solid var(--line-soft);padding:16px;position:relative}
+  .gauge .k{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(11,13,12,.6)}
+  .gauge .v{font-family:var(--display);font-weight:800;font-size:26px;letter-spacing:-.02em;margin-top:6px;color:var(--ink)}
+  .gauge .v em{color:var(--copper);font-style:normal}
+  .gauge .bar{height:3px;background:var(--line-soft);margin-top:14px;position:relative;overflow:hidden}
+  .gauge .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--copper);transition:width .5s cubic-bezier(.2,.7,.2,1)}
+  .gauge.locked .v{filter:blur(6px);user-select:none}
+  .gauge.locked::after{content:"🔒 dados protegidos";position:absolute;left:16px;right:16px;bottom:16px;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--copper);font-weight:600;background:var(--paper-2);padding:6px 0}
+  .gauges.unlocked .gauge.locked{filter:none}
+  .gauges.unlocked .gauge.locked .v{filter:none}
+  .gauges.unlocked .gauge.locked::after{content:""}
+
+  .recommend{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;background:linear-gradient(90deg, var(--paper-2), var(--paper));border-top:2px solid var(--copper);border-bottom:1px solid var(--line-soft);border-left:1px solid var(--line-soft);border-right:1px solid var(--line-soft);padding:18px 20px;margin-top:18px}
+  .recommend .badge{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--copper);background:rgba(217,119,6,.08);padding:6px 9px;border:1px solid var(--copper)}
+  .recommend .name{font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-.01em;line-height:1;margin-bottom:4px;text-transform:uppercase}
+  .recommend .desc{font-size:13px;color:rgba(11,13,12,.65);line-height:1.4}
+  .recommend .match{text-align:right}
+  .recommend .match .v{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.02em}
+  .recommend .match .l{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(11,13,12,.6)}
+
+  .lead{margin-top:22px;padding-top:22px;border-top:1px solid var(--line-soft)}
+  .lead .head-l{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .lead .head-l h4{font-family:var(--display);font-size:18px;font-weight:800;text-transform:uppercase;letter-spacing:-.01em;margin:0}
+  .lead .head-l .step-num{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--copper)}
+  .row3{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:14px}
+  @media(max-width:560px){.row3{grid-template-columns:1fr}}
+  .privacy{font-family:var(--mono);font-size:10px;color:rgba(11,13,12,.6);margin-top:14px;line-height:1.6;letter-spacing:.04em}
+  .success{padding:28px 22px;border:1px dashed var(--green-700);background:#f0fff4;text-align:center}
+  .success .icon{width:54px;height:54px;border:2px solid var(--green-700);border-radius:50%;display:grid;place-items:center;margin:0 auto 14px;color:var(--green-700);animation:pop .6s cubic-bezier(.2,1.4,.4,1)}
+  @keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+  .success h4{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.01em;text-transform:uppercase;margin:0 0 8px}
+  .success p{font-size:14px;color:rgba(11,13,12,.65);margin:0;line-height:1.5}
+  .success .crm-line{display:inline-flex;align-items:center;gap:8px;margin-top:14px;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green-700)}
+  .success .crm-line .d{width:8px;height:8px;border-radius:50%;background:var(--green-700);animation:bk 1.4s infinite}
+
+  /* ═════ PRODUCTS ═════ */
+  .prods{background:var(--paper)}
+  .prod-tabs{display:flex;gap:0;border-bottom:1px solid var(--ink);margin-bottom:36px;flex-wrap:wrap}
+  .prod-tabs button{padding:14px 22px;background:transparent;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:rgba(11,13,12,.5);border-bottom:2px solid transparent;margin-bottom:-1px;transition:.15s}
+  .prod-tabs button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--copper)}
+  .prod-tabs button:hover{color:var(--ink)}
+  .prod-tabs button .ct{margin-left:8px;font-size:10px;color:rgba(11,13,12,.4)}
+
+  .prod-rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(360px, 1fr);gap:1px;background:var(--ink-2);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--ink) var(--paper)}
+  .prod-rail::-webkit-scrollbar{height:6px}
+  .prod-rail::-webkit-scrollbar-thumb{background:var(--ink)}
+  @media(max-width:880px){.prod-rail{grid-auto-columns:minmax(85%,1fr)}}
+
+  .pcard{background:var(--paper);scroll-snap-align:start;display:flex;flex-direction:column;position:relative;min-height:540px;transition:.3s}
+  .pcard:hover{background:var(--paper-2)}
+  .pcard .nu{position:absolute;top:18px;left:18px;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(11,13,12,.45);z-index:2}
+  .pcard .ribbon{position:absolute;top:18px;right:18px;background:var(--copper);color:#0b0d0c;font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;padding:6px 10px;z-index:2}
+  .pcard .img{aspect-ratio:5/4;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg, var(--paper-2) 0%, var(--paper) 70%);position:relative;overflow:hidden;border-bottom:1px solid var(--line-soft)}
+  .pcard .img::before{content:"";position:absolute;inset:0;
+    background-image:linear-gradient(0deg, rgba(11,13,12,.04) 1px, transparent 1px),linear-gradient(90deg, rgba(11,13,12,.04) 1px, transparent 1px);
+    background-size:32px 32px}
+  .pcard .img img{position:relative;z-index:1;max-width:84%;max-height:80%;object-fit:contain;transition:transform .5s cubic-bezier(.2,.7,.2,1);filter:drop-shadow(0 14px 24px rgba(0,50,21,.18))}
+  .pcard:hover .img img{transform:scale(1.06)}
+  .pcard .info{padding:24px;display:flex;flex-direction:column;flex:1;gap:14px}
+  .pcard .cat{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--copper);font-weight:600}
+  .pcard .name{font-family:var(--display);font-weight:800;font-size:34px;letter-spacing:-.025em;line-height:.95;text-transform:uppercase;margin:0}
+  .pcard .blurb{font-size:14px;color:rgba(11,13,12,.7);line-height:1.5;margin:0}
+  .pcard .specs{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line-soft);padding-top:16px;margin-top:auto}
+  .pcard .specs > div{padding-right:12px;border-right:1px solid var(--line-soft)}
+  .pcard .specs > div:last-child{border-right:0;padding-right:0;padding-left:12px}
+  .pcard .specs > div:not(:first-child){padding-left:12px}
+  .pcard .specs .k{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(11,13,12,.55)}
+  .pcard .specs .v{font-family:var(--display);font-weight:800;font-size:14px;margin-top:4px;line-height:1}
+  .pcard .foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line-soft);padding:18px 24px}
+  .pcard .foot a{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);font-weight:600;display:inline-flex;gap:10px;align-items:center}
+  .pcard .foot a .arr{transition:transform .25s}
+  .pcard .foot a:hover .arr{transform:translateX(4px)}
+  .pcard .foot a:hover{color:var(--copper)}
+  .pcard .foot .price{font-family:var(--mono);font-size:11px;color:rgba(11,13,12,.5);letter-spacing:.14em;text-transform:uppercase}
+
+  .rail-nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(11,13,12,.55)}
+  .rail-nav .arrows{display:flex;gap:8px}
+  .rail-nav .arrows button{width:44px;height:44px;border:1px solid var(--ink);display:grid;place-items:center;transition:.15s}
+  .rail-nav .arrows button:hover{background:var(--ink);color:var(--paper)}
+
+  /* ═════ DIFFERENTIATORS ═════ */
+  .diffs{background:var(--paper-2);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+  .diffs-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
+  .diffs-grid > div{background:var(--paper);padding:32px 28px;display:flex;flex-direction:column;gap:18px;justify-content:space-between;min-height:320px}
+  .diff-1{grid-column:span 7;background:var(--ink) !important;color:var(--paper);min-height:380px !important}
+  .diff-1 .num{color:var(--copper) !important}
+  .diff-1 h3{color:var(--paper)}
+  .diff-1 .desc{color:rgba(245,243,238,.7) !important}
+  .diff-2{grid-column:span 5}
+  .diff-3{grid-column:span 4}
+  .diff-4{grid-column:span 4;background:var(--copper) !important;color:#0b0d0c}
+  .diff-4 .num{color:#0b0d0c !important;opacity:.4}
+  .diff-4 .desc{color:rgba(11,13,12,.85) !important}
+  .diff-5{grid-column:span 4}
+  @media(max-width:980px){.diffs-grid > div{grid-column:span 12 !important}}
+
+  .diffs-grid .num{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(11,13,12,.4)}
+  .diffs-grid h3{font-family:var(--display);font-weight:800;font-size:clamp(28px,3.2vw,46px);letter-spacing:-.025em;line-height:.95;text-transform:uppercase;margin:0}
+  .diffs-grid h3 em{color:var(--copper);font-style:italic;font-weight:900}
+  .diff-4 h3 em{color:#0b0d0c;text-decoration:underline;text-decoration-thickness:3px}
+  .diffs-grid .desc{font-size:14px;line-height:1.55;color:rgba(11,13,12,.7);margin:0}
+  .diffs-grid .stat{font-family:var(--display);font-weight:800;font-size:clamp(56px,7vw,104px);letter-spacing:-.04em;line-height:.85}
+  .diffs-grid .stat em{color:var(--copper);font-style:normal}
+  .diff-1 .stat em{color:var(--copper)}
+  .diff-4 .stat{color:#0b0d0c}
+  .ico{width:32px;height:32px;display:grid;place-items:center;border:1.5px solid currentColor;border-radius:50%}
+
+  /* ═════ BLOG ═════ */
+  .blog{background:var(--paper)}
+  .blog-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:48px;align-items:start}
+  @media(max-width:980px){.blog-grid{grid-template-columns:1fr;gap:32px}}
+  .post-feat{display:flex;flex-direction:column;gap:24px}
+  .post-feat .ph{aspect-ratio:16/10;background:var(--paper-2);position:relative;overflow:hidden}
+  .post-feat .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+  .post-feat .ph:hover img{transform:scale(1.04)}
+  .post-feat .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%, rgba(0,0,0,.4));pointer-events:none}
+  .post-feat .ph .cat{position:absolute;top:18px;left:18px;background:var(--paper);color:var(--ink);font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;padding:7px 11px;z-index:2}
+  .post-feat .ph .read-time{position:absolute;bottom:18px;right:18px;color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;z-index:2}
+  .post-feat h3.h3{font-size:clamp(28px,3vw,44px)}
+  .post-feat .meta{color:rgba(11,13,12,.55)}
+  .post-feat .blurb{font-size:16px;color:rgba(11,13,12,.7);line-height:1.55;max-width:560px}
+  .post-feat .read-more{display:inline-flex;gap:10px;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--ink);align-self:flex-start;border-bottom:1.5px solid var(--copper);padding-bottom:6px}
+
+  .post-list{display:grid;gap:0;border-top:1px solid var(--line-soft)}
+  .post-list article{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:24px 0;border-bottom:1px solid var(--line-soft);transition:.2s}
+  .post-list article:hover{background:var(--paper-2);padding-left:12px}
+  .post-list article .thumb{aspect-ratio:1;background:var(--paper-2);overflow:hidden}
+  .post-list article .thumb img{width:100%;height:100%;object-fit:cover}
+  .post-list article .thumb.gen{background:linear-gradient(135deg,#dee8ff,#79bb87);display:flex;align-items:center;justify-content:center;color:var(--green);font-family:var(--display);font-size:24px;font-weight:800}
+  .post-list article .info{display:flex;flex-direction:column;gap:8px}
+  .post-list article .info .meta{display:flex;gap:12px;color:rgba(11,13,12,.55)}
+  .post-list article .info .meta .cat{color:var(--copper);font-weight:700}
+  .post-list article h4{font-family:var(--display);font-weight:700;font-size:18px;line-height:1.2;letter-spacing:-.01em;margin:0;text-transform:uppercase}
+
+  /* ═════ NEWSLETTER ═════ */
+  .news{background:#0b1d12;color:var(--paper);padding:120px 0;position:relative;overflow:hidden}
+  .news::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 80% 30%, rgba(217,119,6,.18) 0%, transparent 60%);pointer-events:none}
+  .news .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:80px;align-items:center;position:relative}
+  @media(max-width:880px){.news .grid{grid-template-columns:1fr;gap:48px}}
+  .news h2{font-family:var(--display);font-weight:800;font-size:clamp(40px,6vw,88px);letter-spacing:-.03em;line-height:.92;text-transform:uppercase;margin:18px 0 24px}
+  .news h2 em{color:var(--copper);font-style:italic;font-weight:900}
+  .news p.lede{color:rgba(245,243,238,.72);font-size:18px;max-width:520px;margin:0 0 28px}
+  .news .news-form{background:rgba(245,243,238,.04);border:1px solid rgba(245,243,238,.12);padding:36px}
+  .news .news-form h4{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.01em;text-transform:uppercase;margin:0 0 6px;color:var(--paper)}
+  .news .news-form .sub{font-size:13px;color:rgba(245,243,238,.6);margin:0 0 22px;line-height:1.5}
+  .news .news-form label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,243,238,.5);margin-bottom:8px}
+  .news .news-form input{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(245,243,238,.2);color:var(--paper);font-family:var(--body);font-size:16px;padding:10px 0;outline:none;transition:.18s}
+  .news .news-form input:focus{border-bottom-color:var(--copper)}
+  .news .news-form input::placeholder{color:rgba(245,243,238,.32)}
+  .news .news-form .nrow{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
+  @media(max-width:520px){.news .news-form .nrow{grid-template-columns:1fr}}
+  .news .news-form .topics{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+  .news .news-form .topics .chip{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid rgba(245,243,238,.18);font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,243,238,.7);cursor:pointer;transition:.15s;user-select:none}
+  .news .news-form .topics .chip[aria-pressed="true"]{background:var(--copper);border-color:var(--copper);color:#0b0d0c}
+  .news .news-form button{width:100%;background:var(--copper);color:#fff;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;padding:18px;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:12px;transition:.2s}
+  .news .news-form button:hover{background:var(--copper-2)}
+  .news .news-form button:disabled{opacity:.6;cursor:wait}
+  .news .news-form .fine{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,243,238,.4);margin-top:18px;line-height:1.6}
+  .news .news-form .ok{display:none;text-align:center;padding:14px 0}
+  .news .news-form .ok h4{font-size:24px;margin-bottom:8px}
+  .news .news-form .ok p{font-size:14px;color:rgba(245,243,238,.7);max-width:280px;margin:0 auto}
+  .news .news-form.sent .form-inner{display:none}
+  .news .news-form.sent .ok{display:block}
+  .news .perks{display:grid;gap:18px;margin-top:32px}
+  .news .perks .perk{display:flex;gap:14px;align-items:flex-start;font-size:14px;line-height:1.5;color:rgba(245,243,238,.8)}
+  .news .perks .perk .dot{flex-shrink:0;width:6px;height:6px;border-radius:50%;background:var(--copper);margin-top:8px}
+
+  /* ═════ FOOTER ═════ */
+  footer{background:#080906;color:var(--paper);padding:120px 0 36px;border-top:1px solid #1a1d1c}
+  footer .ftr-shout{font-family:var(--display);font-weight:800;font-size:clamp(56px,9vw,160px);letter-spacing:-.035em;line-height:.85;text-transform:uppercase;margin:0 0 80px}
+  footer .ftr-shout em{color:var(--copper);font-style:italic;font-weight:900}
+  footer .ftr-shout .stk{-webkit-text-stroke:1.5px var(--paper);color:transparent}
+
+  footer .ftr-grid{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:48px;padding-bottom:48px;border-bottom:1px solid #1a1d1c;margin-bottom:36px}
+  @media(max-width:880px){footer .ftr-grid{grid-template-columns:1fr 1fr}}
+  footer h5{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(245,243,238,.55);margin:0 0 18px}
+  footer ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+  footer ul a{font-family:var(--body);font-size:15px;color:rgba(245,243,238,.85);transition:.15s}
+  footer ul a:hover{color:var(--copper)}
+  footer .brand-blk .brand img{height:54px}
+  footer .brand-blk .brand{filter:brightness(0) invert(1)}
+  footer .brand-blk p{font-size:14px;line-height:1.6;margin:18px 0 0;max-width:300px;color:rgba(245,243,238,.6)}
+
+  footer .socials{display:flex;gap:8px;margin-top:24px}
+  footer .socials a{width:40px;height:40px;border:1px solid rgba(245,243,238,.18);display:grid;place-items:center;color:var(--paper);transition:.15s}
+  footer .socials a:hover{background:var(--copper);border-color:var(--copper);color:#0b0d0c}
+
+  footer .legal{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,243,238,.4);flex-wrap:wrap;gap:14px}
+  footer .legal .badges{display:flex;gap:14px}
+  footer .legal .badges span{padding:6px 10px;border:1px solid rgba(245,243,238,.16);letter-spacing:.18em}
+
+  /* ═════ wa float ═════ */
+  .wa{position:fixed;right:24px;bottom:24px;z-index:90;width:56px;height:56px;border-radius:50%;background:#22c35e;color:#fff;display:grid;place-items:center;box-shadow:0 6px 20px rgba(34,195,94,.35);transition:.2s}
+  .wa:hover{transform:scale(1.06)}
+
+  /* responsive bits */
+  @media(max-width:980px){
+    .hcard.a{top:6%;right:5%;width:160px}
+    .hcard.b{top:30%;right:0;width:200px}
+    .hcard.c{display:none}
+    .hcard.d{bottom:8%;right:5%;width:200px}
+  }
+
+  /* svg icon size */
+  .arr{width:14px;height:14px}
+  .ic{width:18px;height:18px}
+</style>
+</head>
+<body>
+
+<!-- ═════════ HEADER ═════════ -->
+<header class="site">
+  <div class="container row">
+    <a class="brand brand--light" href="#" aria-label="Tytan Agriculture"><img src="assets/logo-tytan.png" alt="Tytan Agriculture" /></a>
+    <nav class="nav-c">
+      <a href="#produtos">Produtos</a>
+      <a href="#diferenciais">Diferenciais</a>
+      <a href="#blog">Conteúdo</a>
+      <a href="#calc">Calculadora</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <div class="head-cta">
+      <span style="opacity:.65">PT · ES</span>
+      <a class="pill" href="#calc">Solicitar orçamento →</a>
+    </div>
+  </div>
+</header>
+
+<!-- ═════════ HERO ═════════ -->
+<section class="hero">
+  <div class="bg"></div>
+  <div class="photo"></div>
+  <div class="haze"></div>
+  <div class="grid"></div>
+  <div class="dust"></div>
+
+  <div class="container frame">
+    <div></div>
+
+    <div class="stage">
+      <div>
+        <div class="badge-row">
+          <span class="live">Safra 2025/26 · Ativa</span>
+          <span>Fab. Santo Antônio do Sudoeste / PR</span>
+          <span>🇧🇷 🇦🇷 🇵🇾 🇧🇴 4 países</span>
+        </div>
+        <h1 class="display h1">
+          <span class="ink">Precisão</span><br/>
+          <span class="ink">que <em>movimenta</em></span><br/>
+          <span class="stk">a safra.</span>
+        </h1>
+        <div class="sub">
+          <p class="lede">
+            Pulverizadores agrícolas e pecuários, barras pulverizadoras e atomizadores —
+            engenharia industrial brasileira pra cada hectare. Tanques de 400 a 2.500 L,
+            barras de 10 a 24 m, bombas Magnojet a pistão.
+          </p>
+          <div class="ctas">
+            <a href="#calc" class="btn btn-primary">Solicitar orçamento <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+            <a href="#calc" class="btn btn-ghost">Calcular economia</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-strip">
+        <div class="hcard a">
+          <div class="lab">Tanque máx.</div>
+          <div class="val">2.500<span style="font-size:14px;opacity:.6"> L</span></div>
+        </div>
+        <div class="hcard b">
+          <div class="lab">Barra mais larga</div>
+          <div class="val">24<em>m</em></div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,243,238,.5);margin-top:8px">AKVO 2500 PROFISSIONAL</div>
+        </div>
+        <div class="hcard c">
+          <div class="lab">Bomba</div>
+          <div class="val">150<span style="font-size:13px;opacity:.6"> L/min</span></div>
+        </div>
+        <div class="hcard d">
+          <div class="lab">Disponibilidade limitada</div>
+          <div class="val">10 unidades</div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;margin-top:6px">Condição p/ os 10 primeiros · este mês</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ticker bottom -->
+    <div class="ticker">
+      <div class="c">
+        <div class="v">15<em>+</em> anos</div><div class="l">Operando em campo</div>
+      </div>
+      <div class="c">
+        <div class="v">+1.200</div><div class="l">Máquinas em operação</div>
+      </div>
+      <div class="c">
+        <div class="v">22<em>m</em></div><div class="l">Payback médio simulado</div>
+      </div>
+      <div class="c">
+        <div class="v">12<em>×</em></div><div class="l">Parcelado · BNDES Finame</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scrolldown">role para descobrir</div>
+</section>
+
+<!-- ═════════ MARQUEE ═════════ -->
+<div class="marquee">
+  <div class="track">
+    <span>Pulverizadores Agrícolas <span class="dot"></span> Linha AKVO <span class="dot"></span> Pulverizadores Pecuários <span class="dot"></span> Linha Kampo <span class="dot"></span> Barras Pulverizadoras <i>10–24m</i> <span class="dot"></span> Atomizadores <span class="dot"></span> Bomba Magnojet <i>150 L/min</i> <span class="dot"></span></span>
+    <span>Pulverizadores Agrícolas <span class="dot"></span> Linha AKVO <span class="dot"></span> Pulverizadores Pecuários <span class="dot"></span> Linha Kampo <span class="dot"></span> Barras Pulverizadoras <i>10–24m</i> <span class="dot"></span> Atomizadores <span class="dot"></span> Bomba Magnojet <i>150 L/min</i> <span class="dot"></span></span>
+  </div>
+</div>
+
+<!-- ═════════ CALCULATOR ═════════ -->
+<section class="calc" id="calc">
+  <div class="container">
+    <div class="secnum">
+      <div class="l">
+        <div class="num">01</div>
+        <div class="ttl">
+          <div class="eyebrow">Calculadora · Lead magnet</div>
+          <h2 class="display h2">Quanto custa<br/>ter um <em style="color:var(--copper);font-style:italic;font-weight:900">Tytan</em>?</h2>
+        </div>
+      </div>
+      <div class="r" style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,243,238,.6)">
+        ⏱ &nbsp; ~60 segundos
+      </div>
+    </div>
+
+    <div class="calc-grid">
+      <div class="left">
+        <p class="lede" style="color:rgba(245,243,238,.72);max-width:540px">
+          Em três passos, projetamos sua economia em defensivos, redução operacional, ganho de produtividade e payback estimado.
+          Resultado completo enviado pelo WhatsApp — sem ligação fria, sem spam.
+        </p>
+
+        <div class="steps">
+          <div class="step on">
+            <div class="n">01</div>
+            <div class="t">Diga sua cultura<br/>e área</div>
+            <div class="x">Em curso</div>
+          </div>
+          <div class="step">
+            <div class="n">02</div>
+            <div class="t">Veja a recomendação<br/>Tytan</div>
+            <div class="x">A seguir</div>
+          </div>
+          <div class="step">
+            <div class="n">03</div>
+            <div class="t">Receba o relatório<br/>completo</div>
+            <div class="x">Final</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:36px;border-top:1px solid rgba(245,243,238,.18);padding-top:24px">
+          <div style="padding-right:18px;border-right:1px solid rgba(245,243,238,.18)">
+            <div style="font-family:var(--display);font-weight:800;font-size:36px;letter-spacing:-.02em;color:var(--paper)">+1.200</div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,243,238,.55);margin-top:6px">Simulações em 2025</div>
+          </div>
+          <div style="padding-left:18px">
+            <div style="font-family:var(--display);font-weight:800;font-size:36px;letter-spacing:-.02em;color:var(--copper)">22 meses</div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,243,238,.55);margin-top:6px">Payback médio projetado</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="head">
+          <span class="pill">Simulador 02 / 2026</span>
+          <span class="ind"><span class="d"></span>Resposta em 24h úteis</span>
+        </div>
+        <div class="body">
+          <form id="cf">
+            <div class="row2">
+              <div class="field">
+                <label for="culture">Tipo de cultura</label>
+                <select id="culture">
+                  <option>Soja</option><option>Milho</option><option>Café</option>
+                  <option>Hortifruti</option><option>Cana</option><option>Pastagem / Pecuária</option>
+                  <option>Outra</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Tipo de operação</label>
+                <div class="seg" id="seg-op">
+                  <button type="button" data-v="acoplado" aria-pressed="true">Acoplado</button>
+                  <button type="button" data-v="reboque" aria-pressed="false">Reboque</button>
+                  <button type="button" data-v="auto" aria-pressed="false">Auto</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Frequência de pulverização</label>
+              <div class="seg" id="seg-freq">
+                <button type="button" data-v="baixa" aria-pressed="false">Baixa · 1–4/ano</button>
+                <button type="button" data-v="media" aria-pressed="true">Média · 5–10/ano</button>
+                <button type="button" data-v="alta" aria-pressed="false">Alta · 11+/ano</button>
+              </div>
+            </div>
+
+            <div class="field slider-row">
+              <div class="top"><label>Área plantada / hectares</label><span class="v" id="area-v">120 ha</span></div>
+              <input id="area" type="range" min="10" max="2500" value="120" step="10" />
+            </div>
+
+            <div class="recommend">
+              <div class="badge">Match Tytan</div>
+              <div>
+                <div class="name" id="rec-name">AKVO 1000 · Barra 19 m</div>
+                <div class="desc" id="rec-desc">Tanque 1.000 L, bomba 140 L/min. Equilíbrio robustez × tração.</div>
+              </div>
+              <div class="match">
+                <div class="v" id="rec-match">94%</div>
+                <div class="l">Compatibilidade</div>
+              </div>
+            </div>
+
+            <div class="gauges" id="gauges">
+              <div class="gauge">
+                <div class="k">Investimento estimado</div>
+                <div class="v" id="g-invest">R$ 142.000</div>
+                <div class="bar"><i id="b-invest" style="width:55%"></i></div>
+              </div>
+              <div class="gauge">
+                <div class="k">Economia anual proj.</div>
+                <div class="v" id="g-save"><em>R$ 76.800</em></div>
+                <div class="bar"><i id="b-save" style="width:46%"></i></div>
+              </div>
+              <div class="gauge locked">
+                <div class="k">Payback estimado</div>
+                <div class="v" id="g-pb">22 meses</div>
+                <div class="bar"><i id="b-pb" style="width:38%"></i></div>
+              </div>
+              <div class="gauge locked">
+                <div class="k">Ganho de produtividade</div>
+                <div class="v" id="g-prod">+18%</div>
+                <div class="bar"><i id="b-prod" style="width:62%"></i></div>
+              </div>
+            </div>
+
+            <div class="lead" id="lead-block">
+              <div class="head-l">
+                <h4>Receba o relatório completo</h4>
+                <div class="step-num">Etapa final · 03 de 03</div>
+              </div>
+              <div class="row3">
+                <div class="field"><label>Nome</label><input id="ln" type="text" placeholder="Nome completo" required /></div>
+                <div class="field"><label>Telefone</label><input id="lp" type="tel" placeholder="(46) 0 0000-0000" required /></div>
+                <div class="field"><label>Cidade</label><input id="lc" type="text" placeholder="Sua cidade · UF" required /></div>
+              </div>
+              <button type="submit" class="btn btn-ink" style="width:100%;justify-content:center;padding:20px 26px">
+                Ver meu resultado
+                <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </button>
+              <div class="privacy">
+                🛡 Sem disparo automático — só 1 contato consultivo do nosso time técnico em até 24h úteis. LGPD compliant.
+              </div>
+            </div>
+
+            <div id="success" class="success" style="display:none">
+              <div class="icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="28" height="28"><path d="M5 12l5 5L20 7"/></svg>
+              </div>
+              <h4>Pronto, <span id="ok-name">Carlos</span> 🌾</h4>
+              <p>Sua simulação completa foi recebida. Em até 24h úteis, um especialista vai te chamar no WhatsApp <strong id="ok-phone">(46) 0 0000-0000</strong> com o relatório, o catálogo e a condição da safra.</p>
+              <div class="crm-line"><span class="d"></span>SOLICITAÇÃO · STATUS RECEBIDA</div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ PRODUCTS ═════════ -->
+<section class="prods" id="produtos">
+  <div class="container">
+    <div class="secnum">
+      <div class="l">
+        <div class="num">02</div>
+        <div class="ttl">
+          <div class="eyebrow">Linhas de produto · 2026</div>
+          <h2 class="display h2">Uma máquina <em style="color:var(--copper);font-style:italic">pra cada</em><br/>operação do campo.</h2>
+        </div>
+      </div>
+      <div class="r"><a href="#" class="btn btn-outline-ink">Catálogo PDF</a></div>
+    </div>
+
+    <div class="prod-tabs" id="ptabs">
+      <button data-f="all" aria-pressed="true">Todos <span class="ct">09</span></button>
+      <button data-f="agri" aria-pressed="false">Pulverizadores Agrícolas <span class="ct">05</span></button>
+      <button data-f="pec" aria-pressed="false">Pulverizadores Pecuários <span class="ct">02</span></button>
+      <button data-f="bar" aria-pressed="false">Barras Pulverizadoras <span class="ct">04</span></button>
+      <button data-f="atom" aria-pressed="false">Atomizadores <span class="ct">02</span></button>
+    </div>
+
+    <div class="prod-rail" id="prail"></div>
+
+    <div class="rail-nav">
+      <span id="prail-count">01 / 09 modelos</span>
+      <div class="arrows">
+        <button id="prev" aria-label="anterior"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 19l-7-7 7-7"/></svg></button>
+        <button id="next" aria-label="próximo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ DIFFERENTIATORS ═════════ -->
+<section class="diffs" id="diferenciais">
+  <div class="container">
+    <div class="secnum">
+      <div class="l">
+        <div class="num">03</div>
+        <div class="ttl">
+          <div class="eyebrow">Por que Tytan</div>
+          <h2 class="display h2">Robustez de máquina pesada,<br/><em style="color:var(--copper);font-style:italic">precisão de bisturi.</em></h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="diffs-grid">
+      <div class="diff-1">
+        <div>
+          <div class="num">01 · Resistência</div>
+        </div>
+        <div class="stat">15<em>+</em> anos</div>
+        <div>
+          <h3>Quinze anos no campo, quatro países, zero estrutura comprometida.</h3>
+          <p class="desc">Tanques de polietileno reforçado, eixo Tandem opcional e cardan duplo articulado pra trabalhar em terreno acidentado sem quebrar a barra.</p>
+        </div>
+      </div>
+
+      <div class="diff-2">
+        <div><div class="num">02 · Economia</div><div class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
+        <div class="stat">−<em>32%</em></div>
+        <div>
+          <h3>Menos defensivo, mais cobertura.</h3>
+          <p class="desc">Bicos calibrados Magnojet + agitação hidráulica reduzem desperdício e aumentam a homogeneidade da calda.</p>
+        </div>
+      </div>
+
+      <div class="diff-3">
+        <div><div class="num">03 · Tecnologia</div><div class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg></div></div>
+        <div class="stat">GPS<em>+</em></div>
+        <div>
+          <h3>Corte de seção e controle de vazão como opcional.</h3>
+          <p class="desc">Telemetria pronta pra integrar, marcador de espuma e LED de pulverização noturna.</p>
+        </div>
+      </div>
+
+      <div class="diff-4">
+        <div><div class="num">04 · Precisão</div><div class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></div></div>
+        <div class="stat">±<em>2%</em></div>
+        <div>
+          <h3>Vazão constante de 75 a 150 L/min.</h3>
+          <p class="desc">A bomba a pistão Magnojet entrega pressão estável independente do RPM — uniformidade de gota em qualquer relevo.</p>
+        </div>
+      </div>
+
+      <div class="diff-5">
+        <div><div class="num">05 · Suporte</div><div class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div></div>
+        <div class="stat">24<em>h</em></div>
+        <div>
+          <h3>Time técnico em PT/ES.</h3>
+          <p class="desc">Atendimento em até 24h úteis, peças em estoque na fábrica e rede de revendas em 4 países.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ BLOG ═════════ -->
+<section class="blog" id="blog">
+  <div class="container">
+    <div class="secnum">
+      <div class="l">
+        <div class="num">04</div>
+        <div class="ttl">
+          <div class="eyebrow">Conteúdo · Autoridade</div>
+          <h2 class="display h2">Manejo, regulagem<br/>e <em style="color:var(--copper);font-style:italic">novidades</em> do campo.</h2>
+        </div>
+      </div>
+      <div class="r"><a href="#" class="btn btn-outline-ink">Ver tudo</a></div>
+    </div>
+
+    <div class="blog-grid">
+      <article class="post-feat">
+        <div class="ph">
+          <span class="cat">Plano Safra</span>
+          <span class="read-time">8 min · 10 jul</span>
+          <img src="assets/sprayer-action.png" alt="" />
+        </div>
+        <div class="meta">10 julho · Editorial Tytan</div>
+        <h3 class="h3">Como reduzir custos de pulverização em 30% nesta safra</h3>
+        <p class="blurb">Bicos certos, calibração de pressão e regulagem de barra — um guia operacional pra extrair o máximo do equipamento sem queimar margem.</p>
+        <a href="#" class="read-more">Ler artigo completo
+          <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </article>
+
+      <div class="post-list">
+        <article>
+          <div class="thumb"><img src="assets/sprayer-field.jpg" alt="" /></div>
+          <div class="info">
+            <div class="meta"><span class="cat">Manejo</span><span>5 min</span><span>17 abr</span></div>
+            <h4>Melhor época pra aplicação agrícola — vento, umidade, temperatura</h4>
+          </div>
+        </article>
+
+        <article>
+          <div class="thumb gen" style="background:linear-gradient(135deg,#003215,#79bb87);color:#aef2bb">·02</div>
+          <div class="info">
+            <div class="meta"><span class="cat">Eficiência</span><span>4 min</span><span>02 abr</span></div>
+            <h4>Eficiência operacional no campo: 6 indicadores que você devia medir</h4>
+          </div>
+        </article>
+
+        <article>
+          <div class="thumb gen" style="background:linear-gradient(135deg,#d97706,#ffdcc3);color:#663500">·03</div>
+          <div class="info">
+            <div class="meta"><span class="cat">Tecnologia</span><span>7 min</span><span>22 mar</span></div>
+            <h4>Agricultura de precisão na prática — sem mistificação</h4>
+          </div>
+        </article>
+
+        <article>
+          <div class="thumb gen" style="background:linear-gradient(135deg,#dee8ff,#79bb87);color:#003215">·04</div>
+          <div class="info">
+            <div class="meta"><span class="cat">Pecuária</span><span>3 min</span><span>09 mar</span></div>
+            <h4>Pulverização pecuária — protocolos pra mosca, carrapato e mata-pasto</h4>
+          </div>
+        </article>
+
+        <article>
+          <div class="thumb gen" style="background:linear-gradient(135deg,#0b1d12,#003215);color:#aef2bb">·05</div>
+          <div class="info">
+            <div class="meta"><span class="cat">Regulagem</span><span>6 min</span><span>27 fev</span></div>
+            <h4>Como calibrar a barra pulverizadora em 9 passos</h4>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ NEWSLETTER ═════════ -->
+<section class="news" id="newsletter">
+  <div class="container">
+    <div class="grid">
+      <div>
+        <span class="eyebrow" style="color:rgba(244,182,106,.85)">Boletim do campo · mensal</span>
+        <h2>Receba o que <em>movimenta</em> a sua safra.</h2>
+        <p class="lede">
+          Conteúdo técnico produzido pelo nosso time de agronomia: lançamentos, condições BNDES, calendário de aplicação por cultura e comparativos de campo.
+          Sem promessa milagrosa, sem disparo diário.
+        </p>
+        <div class="perks">
+          <div class="perk"><span class="dot"></span><span><b style="color:var(--paper)">1 e-mail por mês.</b> Editorial, não promocional. Cancele em 1 clique.</span></div>
+          <div class="perk"><span class="dot"></span><span><b style="color:var(--paper)">Pré-lançamentos</b> de novos modelos antes do anúncio público.</span></div>
+          <div class="perk"><span class="dot"></span><span><b style="color:var(--paper)">Cases reais</b> de produtores Tytan — com hectares, safra e números.</span></div>
+        </div>
+      </div>
+
+      <form class="news-form" id="nf">
+        <div class="form-inner">
+          <h4>Inscrever-se</h4>
+          <p class="sub">Preencha pra entrar na lista. Nada de spam — promessa.</p>
+
+          <div class="nrow">
+            <div>
+              <label>Nome</label>
+              <input id="nn" type="text" placeholder="Seu nome" required />
+            </div>
+            <div>
+              <label>E-mail</label>
+              <input id="ne" type="email" placeholder="voce@fazenda.com.br" required />
+            </div>
+          </div>
+
+          <label>Temas de interesse</label>
+          <div class="topics" id="ntopics">
+            <span class="chip" data-t="agricola" aria-pressed="true" role="button" tabindex="0">Agrícolas</span>
+            <span class="chip" data-t="pecuario" aria-pressed="false" role="button" tabindex="0">Pecuários</span>
+            <span class="chip" data-t="barras" aria-pressed="false" role="button" tabindex="0">Barras</span>
+            <span class="chip" data-t="atomizadores" aria-pressed="false" role="button" tabindex="0">Atomizadores</span>
+            <span class="chip" data-t="bndes" aria-pressed="false" role="button" tabindex="0">BNDES · Finame</span>
+            <span class="chip" data-t="cases" aria-pressed="false" role="button" tabindex="0">Cases</span>
+          </div>
+
+          <button type="submit">
+            Quero receber
+            <svg width="18" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+          <div class="fine">LGPD · Você pode cancelar a qualquer momento. Não compartilhamos seu e-mail.</div>
+        </div>
+        <div class="ok">
+          <div style="width:48px;height:48px;border-radius:50%;background:rgba(121,187,135,.18);color:var(--green-300);display:grid;place-items:center;margin:0 auto 16px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="24" height="24"><path d="M5 12l5 5L20 7"/></svg>
+          </div>
+          <h4>Inscrição confirmada</h4>
+          <p>Pronto — seu primeiro boletim chega no começo do próximo mês.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ FOOTER ═════════ -->
+<footer id="contato">
+  <div class="container">
+    <h2 class="ftr-shout">
+      Vamos<br/>
+      <em>movimentar</em><br/>
+      <span class="stk">a sua safra.</span>
+    </h2>
+
+    <div class="ftr-grid">
+      <div class="brand-blk">
+        <div class="brand"><img src="assets/logo-tytan.png" alt="Tytan Agriculture" /></div>
+        <p>Pulverizadores agrícolas, pulverizadores pecuários, barras pulverizadoras e atomizadores. Fabricados em Santo Antônio do Sudoeste — PR. Distribuição em Brasil, Argentina, Paraguai e Bolívia.</p>
+        <div class="socials">
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M10 9l5 3-5 3z" fill="currentColor"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 10v8M8 7v.01M12 18v-5a3 3 0 0 1 6 0v5"/></svg></a>
+          <a href="https://wa.me/" aria-label="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 3.4L3 21z"/><path d="M9 10a4 4 0 0 0 4 4"/></svg></a>
+        </div>
+      </div>
+
+      <div>
+        <h5>Produtos</h5>
+        <ul>
+          <li><a href="#">Pulverizadores Agrícolas</a></li>
+          <li><a href="#">Pulverizadores Pecuários</a></li>
+          <li><a href="#">Barras Pulverizadoras</a></li>
+          <li><a href="#">Atomizadores</a></li>
+          <li><a href="#">Opcionais</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Empresa</h5>
+        <ul>
+          <li><a href="#">Sobre a Tytan</a></li>
+          <li><a href="#">Rede de revendas</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#newsletter">Newsletter</a></li>
+          <li><a href="#">Trabalhe conosco</a></li>
+          <li><a href="#">BNDES Finame</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h5>Contato</h5>
+        <ul>
+          <li><a href="tel:+554625631123">(46) 2563-1123</a></li>
+          <li><a href="https://wa.me/554625631123">WhatsApp · 24h úteis</a></li>
+          <li><a href="mailto:tytan@tytanagriculture.com.br">tytan@tytanagriculture.com.br</a></li>
+          <li>PR-481 · Bairro Araras<br/>Santo Antônio do Sudoeste · PR</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="legal">
+      <span>© 2026 Tytan Agriculture · CNPJ 00.000.000/0001-00 · LGPD compliant</span>
+      <div class="badges">
+        <span>ISO 9001</span><span>BNDES Finame</span><span>Plano Safra</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<a href="#calc" class="wa" aria-label="WhatsApp">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.93 11.93 0 0 0 12.06 0C5.49 0 .15 5.34.15 11.91a11.86 11.86 0 0 0 1.6 5.94L0 24l6.27-1.65a11.91 11.91 0 0 0 5.79 1.47h.01c6.57 0 11.91-5.34 11.91-11.91a11.84 11.84 0 0 0-3.46-8.43zM12.06 21.79h-.01a9.86 9.86 0 0 1-5.03-1.38l-.36-.21-3.72.98 1-3.63-.24-.37a9.85 9.85 0 0 1-1.51-5.27c0-5.46 4.45-9.91 9.92-9.91 2.65 0 5.13 1.03 7 2.91a9.83 9.83 0 0 1 2.9 7c-.01 5.47-4.46 9.88-9.95 9.88zm5.44-7.4c-.3-.15-1.76-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48a9.04 9.04 0 0 1-1.66-2.07c-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.11 3.22 5.11 4.51.71.31 1.27.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.12-.27-.2-.57-.35z"/></svg>
+</a>
+
+<script>
+/* ═════ products data ═════ */
+const PRODS = [
+  { f:'agri', cat:'Pulverizador Agrícola · AKVO', name:'AKVO 600', tag:'Compacto+', tank:'600 L', bar:'14–16 m', pump:'75–100 L/min', weight:'520 kg', blurb:'Compacto-robusto pra hortifruti, café e pequenas áreas. Polivalência sem abrir mão da bomba a pistão.' },
+  { f:'agri', cat:'Pulverizador Agrícola · AKVO', name:'AKVO 800', tag:'Best-seller', tank:'800 L', bar:'14–19 m', pump:'75–100 L/min', weight:'620 kg', blurb:'O equilíbrio Tytan: tanque 800 L, três opções de barra e tração leve. Modelo mais vendido em 2025.' },
+  { f:'agri', cat:'Pulverizador Agrícola · AKVO', name:'AKVO 1000', tag:'Robusto', tank:'1.000 L', bar:'14–19 m', pump:'75–100 L/min', weight:'660 kg', blurb:'Pra fazendas médias com manejo intensivo. Estrutura reforçada e eixo opcional Tandem.' },
+  { f:'agri', cat:'Pulverizador Agrícola · AKVO', name:'AKVO 2000', tag:'Pro', tank:'2.000 L', bar:'19–22 m', pump:'100–150 L/min', weight:'2.400 kg', blurb:'Janelas curtas, talhões grandes. Bomba de 150 L/min e barra de 22 m em 24h de operação.' },
+  { f:'agri', cat:'Pulverizador Agrícola · AKVO', name:'AKVO 2500', tag:'Top de linha', tank:'2.500 L', bar:'24 m', pump:'150 L/min', weight:'2.600 kg', blurb:'Topo Tytan. Eixo Tandem, rodas Aro 36", barra de 24 m e telemetria pronta.' },
+
+  { f:'pec', cat:'Pulverizador Pecuário · Kampo', name:'Kampo 400', tag:'Compacto', tank:'400 L', bar:'—', pump:'75 L/min', weight:'210 kg', blurb:'Acoplado leve pra mata-pasto, mosca e carrapato. Perfeito pra propriedades pecuárias até 200 cabeças.' },
+  { f:'pec', cat:'Pulverizador Pecuário · Kampo', name:'Kampo 600', tag:'Pecuária', tank:'600 L', bar:'—', pump:'75 L/min', weight:'230 kg', blurb:'Tanque maior pra rebanhos médios. Lava-frascos na tampa e abastecedor acoplado de série.' },
+  { f:'pec', cat:'Pulverizador Pecuário · Kampo', name:'Kampo 2000/2500', tag:'Reboque', tank:'2.000–2.500 L', bar:'—', pump:'75 L/min', weight:'850 kg', blurb:'Reboque pesado pra pecuária extensiva. Agitação hidráulica e filtro de sucção dimensionados pra calda densa.' },
+
+  { f:'bar', cat:'Barra Pulverizadora · BR', name:'Barra BR 19m', tag:'Modular', tank:'—', bar:'19 m', pump:'—', weight:'320 kg', blurb:'Barra modular com 5 seções, pronta pra corte de seção opcional. Aço galvanizado e amortecimento independente.' },
+  { f:'bar', cat:'Barra Pulverizadora · BR', name:'Barra BR 22m', tag:'Auto', tank:'—', bar:'22 m', pump:'—', weight:'410 kg', blurb:'Estrutura paralelogramo com 7 seções. Acompanha o relevo sem perder altura constante de aplicação.' },
+  { f:'bar', cat:'Barra Pulverizadora · BR', name:'Barra BR 24m', tag:'Pro', tank:'—', bar:'24 m', pump:'—', weight:'480 kg', blurb:'A barra mais larga da Tytan. Articulação dupla e travas hidráulicas pra transporte rodoviário.' },
+  { f:'bar', cat:'Barra Pulverizadora · BR', name:'Barra BR 10m', tag:'Compacta', tank:'—', bar:'10 m', pump:'—', weight:'140 kg', blurb:'Para Kampo e pulverizadores compactos. Robustez Tytan em formato leve.' },
+
+  { f:'atom', cat:'Atomizador · ATOM', name:'ATOM Café 600', tag:'Café', tank:'600 L', bar:'—', pump:'80 L/min', weight:'410 kg', blurb:'Turbina centrífuga pra cafezais e fruticultura. Saída ajustável pra alcance de até 30 m.' },
+  { f:'atom', cat:'Atomizador · ATOM', name:'ATOM Vinha 1000', tag:'Vinha', tank:'1.000 L', bar:'—', pump:'100 L/min', weight:'520 kg', blurb:'Atomizador especializado pra vinha e pomares. Bicos cerâmicos e proteção anti-corrosão.' },
+];
+
+const rail = document.getElementById('prail');
+const railCount = document.getElementById('prail-count');
+const tabs = document.getElementById('ptabs');
+
+function pad(n){return String(n).padStart(2,'0')}
+
+function renderRail(filter='all'){
+  const list = filter==='all' ? PRODS : PRODS.filter(p=>p.f===filter);
+  rail.innerHTML = list.map((p,i)=>`
+    <article class="pcard">
+      <span class="nu">${pad(i+1)} / ${pad(list.length)}</span>
+      ${p.tag ? `<span class="ribbon">${p.tag}</span>`:''}
+      <div class="img"><img src="assets/prod-${p.f}.png" alt="${p.name}" onerror="this.src='assets/hero.png'"/></div>
+      <div class="info">
+        <div class="cat">${p.cat}</div>
+        <h3 class="name">${p.name}</h3>
+        <p class="blurb">${p.blurb}</p>
+        <div class="specs">
+          <div><div class="k">Tanque</div><div class="v">${p.tank}</div></div>
+          <div><div class="k">Barra</div><div class="v">${p.bar}</div></div>
+          <div><div class="k">Bomba</div><div class="v">${p.pump}</div></div>
+          <div><div class="k">Peso</div><div class="v">${p.weight}</div></div>
+        </div>
+      </div>
+      <div class="foot">
+        <a href="#">Saiba mais <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+        <span class="price">Sob consulta · BNDES</span>
+      </div>
+    </article>
+  `).join('');
+  railCount.textContent = `01 / ${pad(list.length)} modelos`;
+  rail.scrollTo({left:0,behavior:'smooth'});
+}
+
+tabs.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  tabs.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');
+  renderRail(b.dataset.f);
+});
+renderRail();
+
+document.getElementById('prev').addEventListener('click',()=>rail.scrollBy({left:-380,behavior:'smooth'}));
+document.getElementById('next').addEventListener('click',()=>rail.scrollBy({left: 380,behavior:'smooth'}));
+rail.addEventListener('scroll',()=>{
+  const w = rail.firstElementChild?.offsetWidth || 380;
+  const idx = Math.round(rail.scrollLeft / (w+1)) + 1;
+  const total = rail.children.length;
+  railCount.textContent = `${pad(idx)} / ${pad(total)} modelos`;
+});
+
+/* ═════ segmented buttons ═════ */
+document.querySelectorAll('.seg').forEach(seg=>{
+  seg.addEventListener('click', e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    update();
+  });
+});
+
+/* ═════ calculator ═════ */
+const $area = document.getElementById('area');
+const fmt = n=>'R$ '+Math.round(n).toLocaleString('pt-BR');
+function rec(area){
+  if(area<80)   return {n:'KAMPO 600 · Acoplado',     d:'Tanque 600 L, bomba 75 L/min — ideal pra hortifruti e pecuária.', m:88, base:38000, prod:'+9%'};
+  if(area<250)  return {n:'AKVO 800 · Barra 16 m',    d:'Tanque 800 L, bomba 100 L/min — polivalente e leve.',              m:92, base:78000, prod:'+14%'};
+  if(area<600)  return {n:'AKVO 1000 · Barra 19 m',   d:'Tanque 1.000 L, bomba 140 L/min — robustez × tração.',              m:94, base:142000, prod:'+18%'};
+  if(area<1500) return {n:'AKVO 2000 · Barra 22 m',   d:'Tanque 2.000 L, bomba 150 L/min — pra janelas curtas.',             m:96, base:268000, prod:'+24%'};
+  return            {n:'AKVO 2500 · Barra 24 m',    d:'Top de linha — eixo Tandem e telemetria pronta.',                  m:98, base:318000, prod:'+31%'};
+}
+function getFreqMul(){
+  const v=document.querySelector('#seg-freq button[aria-pressed="true"]')?.dataset.v;
+  return v==='alta' ? 1.5 : v==='baixa' ? .55 : 1;
+}
+function update(){
+  const area=+$area.value;
+  document.getElementById('area-v').textContent = area.toLocaleString('pt-BR')+' ha';
+  const r = rec(area);
+  document.getElementById('rec-name').textContent = r.n;
+  document.getElementById('rec-desc').textContent = r.d;
+  document.getElementById('rec-match').textContent = r.m+'%';
+  const invest = r.base;
+  const save = area * 28 * getFreqMul() * 6; // economia projetada
+  const pbm = Math.max(8, Math.round(invest / (save/12)));
+  document.getElementById('g-invest').textContent = fmt(invest);
+  document.getElementById('g-save').innerHTML = `<em>${fmt(save)}</em>`;
+  document.getElementById('g-pb').textContent = pbm+' meses';
+  document.getElementById('g-prod').textContent = r.prod;
+  document.getElementById('b-invest').style.width = Math.min(100,(invest/350000)*100)+'%';
+  document.getElementById('b-save').style.width = Math.min(100,(save/200000)*100)+'%';
+  document.getElementById('b-pb').style.width = Math.min(100,(48-pbm)/40*100)+'%';
+  document.getElementById('b-prod').style.width = (parseInt(r.prod)/35)*100+'%';
+}
+$area.addEventListener('input',update); update();
+
+/* ═════ CRM integration ═════
+   Configure ONE of these strategies. The submit posts the lead payload as JSON.
+   Common providers:
+     • RD Station: POST https://api.rd.services/platform/conversions  (Bearer token)
+     • HubSpot:    POST https://api.hsforms.com/submissions/v3/integration/submit/{portalId}/{formId}
+     • Pipedrive:  POST https://api.pipedrive.com/v1/leads?api_token=XXX
+     • Webhook genérico (Zapier/Make/n8n): cole a URL aqui.
+   Para Tytan, recomendamos webhook → Make/n8n → CRM.                        */
+const CRM = {
+  endpoint: '/api/crm/leads',          // ← troque pela URL real do CRM/webhook
+  token:    '',                        // opcional — Bearer token
+  source:   'tytan-landing-calculadora',
+  fallbackWhatsApp: '5546256311 23'.replace(/ /g,'')
+};
+
+async function postLead(payload){
+  const headers = {'Content-Type':'application/json'};
+  if(CRM.token) headers['Authorization'] = 'Bearer '+CRM.token;
+  const res = await fetch(CRM.endpoint, {
+    method:'POST', headers,
+    body: JSON.stringify({ ...payload, source: CRM.source, ts: new Date().toISOString() })
+  });
+  if(!res.ok) throw new Error('CRM '+res.status);
+  return res.json().catch(()=>({ok:true}));
+}
+
+document.getElementById('cf').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const n=document.getElementById('ln').value.trim();
+  const p=document.getElementById('lp').value.trim();
+  const c=document.getElementById('lc').value.trim();
+  if(!n||!p||!c) return;
+  const btn = e.target.querySelector('button[type=submit]');
+  const oldHTML = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = 'Enviando…';
+
+  const payload = {
+    name:n, phone:p, city:c,
+    culture: document.getElementById('culture').value,
+    operation: document.querySelector('#seg-op button[aria-pressed="true"]')?.dataset.v,
+    frequency: document.querySelector('#seg-freq button[aria-pressed="true"]')?.dataset.v,
+    area_ha: +$area.value,
+    recommendation: document.getElementById('rec-name').textContent,
+    estimated_invest: document.getElementById('g-invest').textContent,
+    estimated_save:   document.getElementById('g-save').textContent,
+    estimated_payback:document.getElementById('g-pb').textContent
+  };
+
+  try {
+    await postLead(payload);
+  } catch(err){
+    console.warn('CRM offline — fallback to WhatsApp:', err.message);
+    // graceful fallback: open prefilled WhatsApp
+    const msg = encodeURIComponent(
+      `Olá, sou ${n} (${c}). Simulei pulverizador Tytan: ${payload.recommendation}, área ${payload.area_ha} ha. Quero o relatório completo.`);
+    window.open(`https://wa.me/${CRM.fallbackWhatsApp}?text=${msg}`,'_blank');
+  } finally {
+    btn.disabled=false; btn.innerHTML=oldHTML;
+  }
+
+  document.getElementById('gauges').classList.add('unlocked');
+  document.getElementById('lead-block').style.display='none';
+  document.getElementById('ok-name').textContent = n.split(' ')[0];
+  document.getElementById('ok-phone').textContent = p;
+  const ok=document.getElementById('success'); ok.style.display='block';
+  ok.scrollIntoView({behavior:'smooth',block:'nearest'});
+});
+
+/* ═════ NEWSLETTER ═════ */
+const NEWSLETTER = {
+  endpoint: '/api/newsletter/subscribe',  // ← troque pela URL real (Mailchimp/RD/webhook)
+  source:   'tytan-landing-newsletter'
+};
+document.querySelectorAll('#ntopics .chip').forEach(c=>{
+  const toggle = ()=>{ const cur = c.getAttribute('aria-pressed')==='true'; c.setAttribute('aria-pressed', cur?'false':'true'); };
+  c.addEventListener('click', toggle);
+  c.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggle(); }});
+});
+document.getElementById('nf').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const form = e.currentTarget;
+  const name = document.getElementById('nn').value.trim();
+  const email= document.getElementById('ne').value.trim();
+  if(!name||!email) return;
+  const topics = [...document.querySelectorAll('#ntopics .chip[aria-pressed="true"]')].map(c=>c.dataset.t);
+  const btn = form.querySelector('button[type=submit]');
+  const oldHTML = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = 'Inscrevendo…';
+  const payload = { name, email, topics, source: NEWSLETTER.source, ts: new Date().toISOString() };
+  try {
+    await fetch(NEWSLETTER.endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  } catch(err){ /* graceful: still confirm — lead salvo localmente */ }
+  finally { btn.disabled=false; btn.innerHTML=oldHTML; }
+  form.classList.add('sent');
+});
+
+/* ═════ hero parallax (lightweight) ═════ */
+const photo = document.querySelector('.hero .photo');
+const dust = document.querySelector('.hero .dust');
+window.addEventListener('scroll', ()=>{
+  const y = Math.min(window.scrollY, 1400);
+  if(photo) photo.style.transform = `translateY(${y*.15}px) scale(${1+y*.0001})`;
+  if(dust)  dust.style.transform  = `translateY(${y*.05}px)`;
+}, {passive:true});
+</script>
+
+</body>
+</html>

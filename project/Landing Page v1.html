@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tytan Agriculture — Pulverizadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* surfaces */
+    --surface:#f9f9ff;
+    --surface-container:#e7eeff;
+    --surface-container-low:#f0f3ff;
+    --surface-container-high:#dee8ff;
+    --on-surface:#111c2d;
+    --on-surface-variant:#404941;
+    --outline:#c0c9be;
+    --outline-strong:#707970;
+    /* brand */
+    --primary:#003215;          /* dark green */
+    --primary-700:#004b23;
+    --primary-300:#79bb87;
+    --primary-100:#aef2bb;
+    --copper:#d97706;           /* CTA accent */
+    --copper-600:#b75f00;
+    --copper-100:#ffdcc3;
+    --danger:#ba1a1a;
+    /* radius/spacing */
+    --r-sm:.125rem; --r:.25rem; --r-md:.375rem; --r-lg:.5rem; --r-xl:.75rem;
+    --container:1280px;
+    --gutter:24px;
+    /* type */
+    --display:'Montserrat', system-ui, sans-serif;
+    --body:'Work Sans', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--surface);color:var(--on-surface);font-family:var(--body);-webkit-font-smoothing:antialiased;text-wrap:pretty;}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;border:0;background:transparent;color:inherit}
+  .container{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+  .h1{font-family:var(--display);font-weight:800;font-size:64px;line-height:1.02;letter-spacing:-.02em;margin:0}
+  .h2{font-family:var(--display);font-weight:700;font-size:40px;line-height:1.1;letter-spacing:-.01em;margin:0}
+  .h3{font-family:var(--display);font-weight:700;font-size:24px;line-height:1.2;margin:0}
+  .h4{font-family:var(--display);font-weight:600;font-size:18px;line-height:1.25;margin:0}
+  .eyebrow{font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--primary-700);}
+  .lede{font-family:var(--body);font-size:18px;font-weight:300;line-height:1.6;color:var(--on-surface);}
+  .body{font-size:16px;line-height:1.55;color:var(--on-surface);}
+  .label{font-family:var(--body);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--on-surface-variant);}
+  .mono-tag{font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+
+  /* ─────── header ─────── */
+  header.site{position:sticky;top:0;z-index:50;background:rgba(249,249,255,.92);backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--outline)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand img{height:32px;width:auto}
+  .navlinks{display:flex;gap:28px}
+  .navlinks a{font-size:14px;font-weight:500;color:var(--on-surface);position:relative;padding:6px 0}
+  .navlinks a:hover{color:var(--primary-700)}
+  .navlinks a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--copper);transition:width .2s}
+  .navlinks a:hover::after{width:100%}
+  @media(max-width:880px){.navlinks{display:none}}
+
+  /* ─────── buttons ─────── */
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:var(--r);font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;transition:transform .15s, background .15s, border-color .15s, color .15s}
+  .btn-primary{background:var(--copper);color:#fff;border:1px solid var(--copper)}
+  .btn-primary:hover{background:var(--copper-600);border-color:var(--copper-600)}
+  .btn-outline{background:transparent;color:var(--primary-700);border:1.5px solid var(--primary-700)}
+  .btn-outline:hover{background:var(--primary-700);color:#fff}
+  .btn-ghost{background:transparent;color:var(--primary-700);border:1px solid var(--outline)}
+  .btn-ghost:hover{border-color:var(--primary-700)}
+  .btn .arrow{transition:transform .2s}
+  .btn:hover .arrow{transform:translateX(3px)}
+
+  /* ─────── hero ─────── */
+  .hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#f0f3ff 0%, #f9f9ff 70%);}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;padding:72px 0 96px}
+  @media(max-width:980px){.hero-grid{grid-template-columns:1fr;gap:32px;padding:48px 0 64px}}
+  .hero .country-strip{display:flex;gap:18px;align-items:center;margin-bottom:20px;color:var(--on-surface-variant);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
+  .hero .country-strip .dot{width:5px;height:5px;border-radius:50%;background:var(--primary-700)}
+  .hero h1 strong{color:var(--copper)}
+  .hero .lede{margin:24px 0 32px;max-width:560px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:48px;border-top:1px solid var(--outline);padding-top:24px;max-width:540px}
+  .hero-meta div{padding-right:16px;border-right:1px solid var(--outline)}
+  .hero-meta div:last-child{border-right:0;padding-right:0;padding-left:16px}
+  .hero-meta div:not(:first-child){padding-left:16px}
+  .hero-meta .num{font-family:var(--display);font-weight:700;font-size:28px;color:var(--primary-700);line-height:1}
+  .hero-meta .lab{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--on-surface-variant);margin-top:6px;font-weight:600}
+
+  .hero-visual{position:relative;border:1px solid var(--outline);border-radius:var(--r-lg);background:#fff;overflow:hidden;aspect-ratio:5/4}
+  .hero-visual::before{content:"";position:absolute;inset:0;background:
+    linear-gradient(180deg, rgba(0,50,21,0) 60%, rgba(0,50,21,.55) 100%),
+    url('assets/sprayer-field.jpg') center/cover no-repeat;}
+  .hero-visual::after{content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(0deg, rgba(255,255,255,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+    background-size:48px 48px;mix-blend-mode:overlay;}
+  .hero-stamp{position:absolute;left:20px;top:20px;display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--outline);border-radius:var(--r);padding:8px 12px;z-index:2}
+  .hero-stamp .ind{width:8px;height:8px;border-radius:50%;background:var(--copper);box-shadow:0 0 0 4px rgba(217,119,6,.18)}
+  .hero-stamp span{font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--on-surface)}
+  .hero-tag{position:absolute;left:20px;bottom:20px;right:20px;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;color:#fff;gap:16px}
+  .hero-tag .big{font-family:var(--display);font-weight:800;font-size:44px;line-height:1;letter-spacing:-.02em}
+  .hero-tag .sub{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.85;margin-top:6px}
+  .hero-tag .spec{text-align:right;font-family:var(--body)}
+  .hero-tag .spec b{font-family:var(--display);font-size:18px;display:block;font-weight:700}
+  .hero-tag .spec span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+
+  /* ─────── stats strip ─────── */
+  .stats{background:var(--primary);color:#fff;border-top:1px solid var(--primary-700)}
+  .stats .row{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+  @media(max-width:880px){.stats .row{grid-template-columns:repeat(2,1fr)}}
+  .stats .cell{padding:32px 24px;border-right:1px solid rgba(255,255,255,.08)}
+  .stats .cell:last-child{border-right:0}
+  .stats .num{font-family:var(--display);font-weight:700;font-size:36px;letter-spacing:-.01em}
+  .stats .num em{color:var(--copper);font-style:normal}
+  .stats .lab{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.78;margin-top:8px;font-weight:600}
+
+  /* ─────── section header ─────── */
+  section{padding:96px 0}
+  @media(max-width:880px){section{padding:64px 0}}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:48px;border-bottom:1px solid var(--outline);padding-bottom:20px}
+  .sec-head .l .eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .sec-head .l .eyebrow::before{content:"";width:24px;height:2px;background:var(--copper)}
+  .sec-head .l .h2{max-width:780px}
+  .sec-head .r{display:flex;gap:8px}
+
+  /* ─────── product filters / cards ─────── */
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+  .chip{padding:8px 14px;border:1px solid var(--outline);border-radius:9999px;background:#fff;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--on-surface-variant);transition:all .15s}
+  .chip[aria-pressed="true"]{background:var(--primary-700);color:#fff;border-color:var(--primary-700)}
+  .chip:hover:not([aria-pressed="true"]){border-color:var(--primary-700);color:var(--primary-700)}
+
+  .grid-products{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:980px){.grid-products{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:640px){.grid-products{grid-template-columns:1fr}}
+  .pcard{position:relative;background:#fff;border:1px solid var(--outline);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s, transform .2s}
+  .pcard:hover{border-color:var(--primary-700);transform:translateY(-2px)}
+  .pcard .ribbon{position:absolute;top:0;left:0;background:var(--primary-700);color:#fff;font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;padding:6px 12px;border-bottom-right-radius:var(--r)}
+  .pcard .img{position:relative;aspect-ratio:4/3;background:linear-gradient(180deg,#f0f3ff,#dee8ff);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--outline);overflow:hidden}
+  .pcard .img::before{content:"";position:absolute;inset:0;background-image:linear-gradient(0deg, rgba(0,50,21,.04) 1px, transparent 1px),linear-gradient(90deg, rgba(0,50,21,.04) 1px, transparent 1px);background-size:24px 24px}
+  .pcard .img img{position:relative;max-height:78%;max-width:84%;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,50,21,.18))}
+  .pcard .img .badge-tank{position:absolute;right:12px;bottom:12px;background:var(--copper);color:#fff;border-radius:var(--r);padding:6px 10px;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.04em}
+  .pcard .body{padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .pcard .line{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--copper)}
+  .pcard h3{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.2;margin:0;color:var(--on-surface)}
+  .pcard .specs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 12px;border-top:1px solid var(--outline);padding-top:12px;margin-top:auto}
+  .pcard .specs .k{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-surface-variant);font-weight:600}
+  .pcard .specs .v{font-family:var(--display);font-weight:700;font-size:14px;color:var(--primary-700);margin-top:2px}
+  .pcard .foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--outline);padding:12px 18px}
+  .pcard .foot a{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--primary-700);display:inline-flex;gap:8px;align-items:center}
+  .pcard .foot a:hover{color:var(--copper)}
+  .pcard .foot .price{font-family:var(--display);font-weight:600;font-size:13px;color:var(--on-surface-variant)}
+
+  /* ─────── blog ─────── */
+  .blog-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:24px}
+  @media(max-width:980px){.blog-grid{grid-template-columns:1fr}}
+  .post{display:flex;flex-direction:column;border:1px solid var(--outline);border-radius:var(--r);background:#fff;overflow:hidden}
+  .post .ph{aspect-ratio:16/10;background:#dee8ff;position:relative;overflow:hidden}
+  .post .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,50,21,0) 50%, rgba(0,50,21,.45));pointer-events:none}
+  .post .ph img{width:100%;height:100%;object-fit:cover}
+  .post .ph .cat{position:absolute;top:14px;left:14px;background:#fff;color:var(--primary-700);padding:6px 10px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;border-radius:var(--r);z-index:1}
+  .post .pad{padding:20px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .post.feat{grid-row:span 1}
+  .post .meta{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-surface-variant);font-weight:600;display:flex;gap:10px;align-items:center}
+  .post .meta::before{content:"";width:18px;height:1px;background:var(--copper)}
+  .post h4{font-family:var(--display);font-weight:700;font-size:18px;line-height:1.25;margin:0}
+  .post.feat h4{font-size:24px}
+  .post p{font-size:14px;color:var(--on-surface-variant);line-height:1.55;margin:0}
+  .post .read{margin-top:auto;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--primary-700);display:inline-flex;gap:8px;align-items:center}
+  .post:hover .read{color:var(--copper)}
+
+  /* ─────── calculator ─────── */
+  .calc-section{background:linear-gradient(180deg,#0b1d12 0%, #003215 100%);color:#ecf1ff;position:relative;overflow:hidden}
+  .calc-section::before{content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(0deg, rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size:48px 48px;pointer-events:none}
+  .calc-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:48px;align-items:start;position:relative}
+  @media(max-width:980px){.calc-grid{grid-template-columns:1fr;gap:32px}}
+  .calc-section .eyebrow{color:var(--copper)}
+  .calc-section h2{color:#fff}
+  .calc-section .lede{color:#cfdaf2}
+  .calc-bullets{display:grid;gap:14px;margin-top:28px}
+  .calc-bullets li{display:flex;gap:14px;align-items:flex-start;list-style:none;padding-left:0;font-size:15px;color:#dee8ff;line-height:1.5}
+  .calc-bullets .num{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:rgba(217,119,6,.15);border:1px solid var(--copper);color:var(--copper);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:13px}
+
+  .panel{background:#fff;color:var(--on-surface);border:1px solid var(--outline);border-radius:var(--r-lg);padding:0;overflow:hidden;box-shadow:0 4px 0 rgba(0,0,0,.06)}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--outline);background:#f0f3ff}
+  .panel-head .pill{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--primary-700);background:#fff;border:1px solid var(--outline);padding:5px 8px;border-radius:var(--r)}
+  .panel-head .ind{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-surface-variant);font-weight:600}
+  .panel-head .ind .d{width:8px;height:8px;border-radius:50%;background:var(--copper);animation:blink 1.6s infinite}
+  @keyframes blink{0%,60%{opacity:1}80%{opacity:.2}100%{opacity:1}}
+  .panel-body{padding:24px}
+  .field{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+  .field label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--on-surface-variant)}
+  .field input,.field select{font:inherit;font-size:15px;padding:12px 14px;border:1px solid var(--outline);border-radius:var(--r);background:#fff;color:var(--on-surface);transition:border .15s, box-shadow .15s}
+  .field input:focus,.field select:focus{outline:0;border-color:var(--primary-700);box-shadow:inset 0 0 0 1px var(--primary-700)}
+  .seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--outline);border-radius:var(--r);overflow:hidden}
+  .seg button{padding:10px 8px;background:#fff;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--on-surface-variant);border-right:1px solid var(--outline);transition:all .15s}
+  .seg button:last-child{border-right:0}
+  .seg button[aria-pressed="true"]{background:var(--primary-700);color:#fff}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .slider-row{display:flex;flex-direction:column;gap:8px}
+  .slider-row .top{display:flex;justify-content:space-between;align-items:baseline}
+  .slider-row .v{font-family:var(--display);font-weight:700;font-size:18px;color:var(--primary-700)}
+  .slider-row input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:var(--outline);border-radius:2px}
+  .slider-row input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:var(--copper);border:2px solid #fff;box-shadow:0 0 0 1px var(--copper);cursor:pointer}
+  .slider-row input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--copper);border:2px solid #fff;cursor:pointer}
+
+  .estimate{margin-top:8px;border-top:1px dashed var(--outline);padding-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .estimate .box{background:#f0f3ff;border:1px solid var(--outline);border-radius:var(--r);padding:14px}
+  .estimate .box .k{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--on-surface-variant);font-weight:700}
+  .estimate .box .v{font-family:var(--display);font-weight:700;font-size:22px;color:var(--primary-700);margin-top:4px}
+  .estimate .box.locked{position:relative;background:#dee8ff;color:var(--on-surface-variant)}
+  .estimate .box.locked .v{color:var(--on-surface-variant);filter:blur(5px);user-select:none}
+  .estimate .box.locked::after{content:"🔒  Desbloqueie";position:absolute;inset:auto 14px 14px auto;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--copper);font-weight:700}
+  .estimate.unlocked .box.locked{background:#f0f3ff;color:var(--on-surface)}
+  .estimate.unlocked .box.locked .v{color:var(--primary-700);filter:none}
+  .estimate.unlocked .box.locked::after{content:""}
+
+  .recommend{display:flex;align-items:center;gap:14px;background:linear-gradient(90deg,#f0f3ff,#dee8ff);border:1px solid var(--outline);border-radius:var(--r);padding:12px 14px;margin-top:14px}
+  .recommend .tag{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--copper)}
+  .recommend .name{font-family:var(--display);font-weight:700;font-size:16px;color:var(--primary-700)}
+  .recommend .desc{font-size:12px;color:var(--on-surface-variant);margin-top:2px}
+
+  .lead{margin-top:18px;padding-top:18px;border-top:1px solid var(--outline)}
+  .lead .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .lead .head h4{font-family:var(--display);font-size:18px;font-weight:700;margin:0}
+  .lead .head .step{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--copper)}
+  .privacy{font-size:11px;color:var(--on-surface-variant);margin-top:10px;line-height:1.5;display:flex;gap:8px;align-items:flex-start}
+  .privacy::before{content:"🛡";opacity:.6}
+  .success{padding:20px;border:1px dashed var(--primary-700);border-radius:var(--r);background:#f0fff4;color:var(--primary);text-align:center}
+  .success h4{font-family:var(--display);font-size:20px;margin:0 0 6px}
+  .success p{font-size:14px;color:var(--on-surface-variant);margin:0}
+
+  /* ─────── footer ─────── */
+  footer{background:var(--primary);color:#cfdaf2;border-top:1px solid var(--primary-700);padding:64px 0 28px}
+  footer .top{display:grid;grid-template-columns:1.4fr repeat(3,1fr);gap:32px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.08)}
+  @media(max-width:880px){footer .top{grid-template-columns:1fr 1fr}}
+  footer h5{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#fff;margin:0 0 16px}
+  footer ul{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+  footer ul a{font-size:14px;color:#cfdaf2}
+  footer ul a:hover{color:#fff}
+  footer .brand-blk img{height:36px;filter:brightness(0) invert(1)}
+  footer .brand-blk p{font-size:14px;line-height:1.6;margin:14px 0 0;max-width:300px;color:#cfdaf2}
+  footer .legal{display:flex;justify-content:space-between;align-items:center;padding-top:24px;font-size:12px;color:rgba(207,218,242,.7);flex-wrap:wrap;gap:12px}
+  footer .legal .badges{display:flex;gap:14px}
+  footer .legal .badges span{padding:6px 10px;border:1px solid rgba(255,255,255,.16);border-radius:var(--r);letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+
+  /* ─────── small util ─────── */
+  .arrow{width:14px;height:14px}
+  .icon{width:18px;height:18px;flex:0 0 auto}
+  .visual-fallback{display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:var(--primary-700);font-family:var(--display);font-weight:800}
+
+  /* responsive h1 */
+  @media(max-width:980px){.h1{font-size:48px}.h2{font-size:32px}}
+  @media(max-width:560px){.h1{font-size:38px}}
+</style>
+</head>
+<body>
+
+<!-- ───────── header ───────── -->
+<header class="site">
+  <div class="container nav">
+    <a class="brand" href="#">
+      <img src="assets/logo.png" alt="Tytan Agriculture" />
+    </a>
+    <nav class="navlinks">
+      <a href="#produtos">Produtos</a>
+      <a href="#blog">Blog</a>
+      <a href="#calculadora">Calculadora</a>
+      <a href="#contato">Contato</a>
+      <a href="#suporte">Suporte</a>
+    </nav>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span class="mono-tag" style="color:var(--on-surface-variant)">PT · ES</span>
+      <a href="#calculadora" class="btn btn-primary" style="padding:10px 16px;font-size:12px">Orçamento
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ───────── hero ───────── -->
+<section class="hero" style="padding:0">
+  <div class="container hero-grid">
+    <div>
+      <div class="country-strip">
+        <span>🇧🇷 Brasil</span><span class="dot"></span>
+        <span>🇦🇷 Argentina</span><span class="dot"></span>
+        <span>🇵🇾 Paraguai</span><span class="dot"></span>
+        <span>🇧🇴 Bolívia</span>
+      </div>
+      <h1 class="h1">
+        Pulverizadores feitos para <strong>cada hectare</strong> do seu campo.
+      </h1>
+      <p class="lede">
+        Engenharia agrícola fabricada em Santo Antônio do Sudoeste — PR. Tanques de 400 a 2.500 litros,
+        barras de 10 a 24 metros e bombas Magnojet a pistão. Mesmo padrão de robustez, do hortifruti ao soja-milho.
+      </p>
+      <div class="hero-cta">
+        <a href="#produtos" class="btn btn-primary">
+          Ver linha 2026
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#calculadora" class="btn btn-outline">Calcular custo-benefício</a>
+      </div>
+      <div class="hero-meta">
+        <div><div class="num">15+ anos</div><div class="lab">Em campo</div></div>
+        <div><div class="num">400–2.500L</div><div class="lab">Capacidade</div></div>
+        <div><div class="num">10–24m</div><div class="lab">Largura de barra</div></div>
+      </div>
+    </div>
+
+    <div class="hero-visual" role="img" aria-label="Pulverizador Tytan em operação no campo">
+      <div class="hero-stamp"><span class="ind"></span><span>EM OPERAÇÃO · LINHA AKVO</span></div>
+      <div class="hero-tag">
+        <div>
+          <div class="big">AKVO 2500</div>
+          <div class="sub">Linha Profissional · Barra 24m</div>
+        </div>
+        <div class="spec">
+          <b>150 L/min</b><span>Bomba Magnojet</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- stats -->
+  <div class="stats">
+    <div class="container">
+      <div class="row">
+        <div class="cell"><div class="num">4 <em>países</em></div><div class="lab">de atuação</div></div>
+        <div class="cell"><div class="num">2.500 L</div><div class="lab">tanque máximo</div></div>
+        <div class="cell"><div class="num">24 m</div><div class="lab">barra mais larga</div></div>
+        <div class="cell"><div class="num">150 L/min</div><div class="lab">vazão da bomba</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── products ───────── -->
+<section id="produtos">
+  <div class="container">
+    <div class="sec-head">
+      <div class="l">
+        <div class="eyebrow">02 · Linhas de produto</div>
+        <h2 class="h2">Da horta ao talhão de 24 metros — uma máquina pra cada operação.</h2>
+      </div>
+      <div class="r">
+        <a href="#" class="btn btn-ghost">Catálogo PDF</a>
+      </div>
+    </div>
+
+    <div class="filters" id="filters">
+      <button class="chip" aria-pressed="true" data-f="all">Todos · 7</button>
+      <button class="chip" aria-pressed="false" data-f="kampo">Compacta · Kampo 400/600</button>
+      <button class="chip" aria-pressed="false" data-f="kampo2">Reboque · Kampo 2000/2500</button>
+      <button class="chip" aria-pressed="false" data-f="akvo-m">Média · AKVO 600/800</button>
+      <button class="chip" aria-pressed="false" data-f="akvo-r">Robusta · AKVO 1000</button>
+      <button class="chip" aria-pressed="false" data-f="akvo-p">Profissional · AKVO 2000/2500</button>
+    </div>
+
+    <div class="grid-products" id="grid"></div>
+  </div>
+</section>
+
+<!-- ───────── blog ───────── -->
+<section id="blog" style="background:var(--surface-container-low);border-top:1px solid var(--outline);border-bottom:1px solid var(--outline)">
+  <div class="container">
+    <div class="sec-head">
+      <div class="l">
+        <div class="eyebrow">03 · Conteúdo do campo</div>
+        <h2 class="h2">Manejo, regulagem e novidades — direto de quem fabrica o equipamento.</h2>
+      </div>
+      <div class="r">
+        <a href="#" class="btn btn-ghost">Todos os artigos
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="blog-grid">
+      <article class="post feat">
+        <div class="ph">
+          <span class="cat">Plano Safra</span>
+          <img src="assets/sprayer-action.png" alt="" />
+        </div>
+        <div class="pad">
+          <div class="meta">10 julho · 8 min de leitura</div>
+          <h4>Plano Safra 23/24: R$ 364 bilhões em recursos e o que muda para a agricultura familiar</h4>
+          <p>Como a nova linha de crédito impacta a aquisição de pulverizadores e quais condições aproveitar nesta janela.</p>
+          <span class="read">Ler artigo
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </span>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="ph"><span class="cat">Tarde de campo</span><img src="assets/sprayer-field.jpg" alt="" /></div>
+        <div class="pad">
+          <div class="meta">29 maio · 4 min</div>
+          <h4>Pulverização eficaz em Irati: como Tytan apresentou a regulagem ideal</h4>
+          <p>Resumo dos testes de bicos, pressão e vazão realizados na tarde de campo organizada por revendedores parceiros.</p>
+          <span class="read">Ler artigo
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </span>
+        </div>
+      </article>
+
+      <article class="post">
+        <div class="ph"><span class="cat">Manejo</span>
+          <div class="visual-fallback" style="background:linear-gradient(135deg,#dee8ff,#79bb87);font-size:32px">Bicos · 03</div>
+        </div>
+        <div class="pad">
+          <div class="meta">17 abril · 6 min</div>
+          <h4>Escolha do bico de pulverização: 5 critérios que definem deriva e cobertura</h4>
+          <p>Um guia rápido para evitar perdas e escolher entre leque, cone e indução de ar conforme a operação.</p>
+          <span class="read">Ler artigo
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── calculator ───────── -->
+<section id="calculadora" class="calc-section">
+  <div class="container calc-grid">
+    <div>
+      <div class="eyebrow">04 · Calculadora · Página isca</div>
+      <h2 class="h2" style="margin-top:8px">Quanto custa ter um pulverizador Tytan?</h2>
+      <p class="lede">
+        Em 60 segundos, calculamos a economia projetada em defensivos, tempo de operação e payback estimado
+        pra sua área. O resultado completo é enviado por WhatsApp — sem ligação fria.
+      </p>
+      <ul class="calc-bullets">
+        <li><span class="num">1</span><span><b>Diga sua cultura, área e necessidade.</b> Soja, milho, café, hortifruti ou pecuária.</span></li>
+        <li><span class="num">2</span><span><b>Veja a recomendação Tytan ideal</b> — modelo, barra, vazão e payback estimado.</span></li>
+        <li><span class="num">3</span><span><b>Receba a simulação completa.</b> Nome + WhatsApp e mandamos o relatório + condições do mês.</span></li>
+      </ul>
+
+      <div style="display:flex;gap:18px;margin-top:36px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1)">
+        <div>
+          <div style="font-family:var(--display);font-weight:700;font-size:28px;color:#fff">+1.200</div>
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--primary-300);font-weight:600;margin-top:4px">Simulações 2025</div>
+        </div>
+        <div style="border-left:1px solid rgba(255,255,255,.12);padding-left:18px">
+          <div style="font-family:var(--display);font-weight:700;font-size:28px;color:#fff">22 meses</div>
+          <div style="font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--primary-300);font-weight:600;margin-top:4px">Payback médio</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <span class="pill">Simulador 01 / 2026</span>
+        <span class="ind"><span class="d"></span>conectado ao CRM</span>
+      </div>
+      <div class="panel-body">
+        <form id="calc-form">
+          <div class="field">
+            <label for="culture">Cultura principal</label>
+            <select id="culture">
+              <option>Soja</option>
+              <option>Milho</option>
+              <option>Café</option>
+              <option>Hortifruti</option>
+              <option>Pastagem / Pecuária</option>
+              <option>Outra</option>
+            </select>
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label>Tipo de operação</label>
+              <div class="seg" id="seg-op">
+                <button type="button" data-v="acoplado" aria-pressed="true">Acoplado</button>
+                <button type="button" data-v="reboque" aria-pressed="false">Reboque</button>
+                <button type="button" data-v="auto" aria-pressed="false">Auto</button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Janela de aplicação</label>
+              <div class="seg" id="seg-win">
+                <button type="button" data-v="curta" aria-pressed="false">Curta</button>
+                <button type="button" data-v="media" aria-pressed="true">Média</button>
+                <button type="button" data-v="ampla" aria-pressed="false">Ampla</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="field slider-row">
+            <div class="top"><label>Área a pulverizar</label><span class="v" id="area-v">120 ha</span></div>
+            <input id="area" type="range" min="20" max="2500" value="120" step="10" />
+          </div>
+
+          <div class="field slider-row">
+            <div class="top"><label>Aplicações por safra</label><span class="v" id="apps-v">6</span></div>
+            <input id="apps" type="range" min="1" max="20" value="6" step="1" />
+          </div>
+
+          <div class="recommend">
+            <div style="flex:1">
+              <div class="tag">Recomendação Tytan</div>
+              <div class="name" id="rec-name">AKVO 1000 · Barra 19 m</div>
+              <div class="desc" id="rec-desc">Tanque de 1.000 L e bomba 140 L/min. Ideal pra sua janela e operação.</div>
+            </div>
+            <div style="text-align:right">
+              <div class="tag">Match</div>
+              <div class="name" id="rec-match">94%</div>
+            </div>
+          </div>
+
+          <div class="estimate" id="estimate">
+            <div class="box">
+              <div class="k">Investimento estimado</div>
+              <div class="v" id="est-invest">R$ 142.000</div>
+            </div>
+            <div class="box">
+              <div class="k">Economia anual proj.</div>
+              <div class="v" id="est-save">R$ 76.800</div>
+            </div>
+            <div class="box locked">
+              <div class="k">Payback</div>
+              <div class="v" id="est-pb">22 meses</div>
+            </div>
+            <div class="box locked">
+              <div class="k">Custo / hectare</div>
+              <div class="v" id="est-ha">R$ 18,40</div>
+            </div>
+          </div>
+
+          <div class="lead" id="lead-block">
+            <div class="head">
+              <h4>Receba o relatório completo</h4>
+              <div class="step">Etapa final · 02/02</div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="lead-name">Nome</label><input id="lead-name" type="text" placeholder="Nome completo" required /></div>
+              <div class="field"><label for="lead-phone">WhatsApp</label><input id="lead-phone" type="tel" placeholder="(46) 0 0000-0000" required /></div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">
+              Desbloquear simulação completa
+              <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </button>
+            <div class="privacy">
+              Seus dados vão direto pro nosso CRM. Sem ligações automáticas — só 1 contato consultivo do nosso time técnico em até 24h úteis.
+            </div>
+          </div>
+
+          <div id="success" class="success" style="display:none">
+            <h4>Pronto, <span id="ok-name">Carlos</span> 🌾</h4>
+            <p>Sua simulação foi enviada pro nosso CRM. Em até 24h úteis, um especialista vai te chamar no WhatsApp <span id="ok-phone">(46) 0 0000-0000</span> com o relatório completo.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── footer ───────── -->
+<footer id="contato">
+  <div class="container">
+    <div class="top">
+      <div class="brand-blk">
+        <img src="assets/logo.png" alt="Tytan Agriculture" />
+        <p>Pulverizadores agrícolas fabricados em Santo Antônio do Sudoeste — PR. Distribuição em Brasil, Argentina, Paraguai e Bolívia.</p>
+      </div>
+      <div>
+        <h5>Produtos</h5>
+        <ul>
+          <li><a href="#">Linha Kampo (Compacta)</a></li>
+          <li><a href="#">Linha AKVO (Média)</a></li>
+          <li><a href="#">Linha AKVO Profissional</a></li>
+          <li><a href="#">Opcionais</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Empresa</h5>
+        <ul>
+          <li><a href="#">Sobre a Tytan</a></li>
+          <li><a href="#">Rede de revendas</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Trabalhe conosco</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contato</h5>
+        <ul>
+          <li>(46) 2563-1123</li>
+          <li>tytan@tytanagriculture.com.br</li>
+          <li>PR-481, Bairro Araras<br/>Santo Antônio do Sudoeste — PR</li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Tytan Agriculture · CNPJ 00.000.000/0001-00</span>
+      <div class="badges">
+        <span>ISO 9001</span>
+        <span>BNDES Finame</span>
+        <span>Plano Safra</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ──────────── product data ──────────── */
+const PRODUCTS = [
+  { f:'kampo', line:'Compacta · Kampo', name:'Kampo 400', tank:'400 L', bar:'10 m', pump:'75 L/min', weight:'210 kg', speed:'2–7 km/h', tag:'Acoplado' },
+  { f:'kampo', line:'Compacta · Kampo', name:'Kampo 600', tank:'600 L', bar:'10 m', pump:'75 L/min', weight:'230 kg', speed:'2–7 km/h', tag:'Acoplado' },
+  { f:'kampo2', line:'Reboque · Kampo', name:'Kampo 2000', tank:'2.000 L', bar:'10 m', pump:'75 L/min', weight:'850 kg', speed:'2–7 km/h', tag:'Reboque' },
+  { f:'kampo2', line:'Reboque · Kampo', name:'Kampo 2500', tank:'2.500 L', bar:'10 m', pump:'75 L/min', weight:'850 kg', speed:'2–7 km/h', tag:'Reboque' },
+  { f:'akvo-m', line:'Média · AKVO', name:'AKVO 600', tank:'600 L', bar:'14–16 m', pump:'75–100 L/min', weight:'520 kg', speed:'2–6 km/h', tag:'Pecuária+' },
+  { f:'akvo-m', line:'Média+ · AKVO', name:'AKVO 800', tank:'800 L', bar:'14–19 m', pump:'75–100 L/min', weight:'620 kg', speed:'2–6 km/h', tag:'Best-seller' },
+  { f:'akvo-r', line:'Robusta · AKVO', name:'AKVO 1000', tank:'1.000 L', bar:'14–19 m', pump:'75–100 L/min', weight:'660 kg', speed:'2–6 km/h', tag:'Robusta' },
+  { f:'akvo-p', line:'Profissional · AKVO', name:'AKVO 2000', tank:'2.000 L', bar:'19–22 m', pump:'100–150 L/min', weight:'2.400 kg', speed:'2–15 km/h', tag:'Pro' },
+  { f:'akvo-p', line:'Profissional · AKVO', name:'AKVO 2500', tank:'2.500 L', bar:'24 m', pump:'150 L/min', weight:'2.600 kg', speed:'2–15 km/h', tag:'Top de linha' },
+];
+
+const grid = document.getElementById('grid');
+function renderProducts(filter){
+  const list = filter==='all' ? PRODUCTS : PRODUCTS.filter(p=>p.f===filter);
+  grid.innerHTML = list.map((p,i)=>`
+    <article class="pcard">
+      ${p.tag ? `<span class="ribbon">${p.tag}</span>` : ''}
+      <div class="img">
+        <img src="assets/hero.png" alt="${p.name}" onerror="this.style.display='none'" />
+        <span class="badge-tank">${p.tank}</span>
+      </div>
+      <div class="body">
+        <span class="line">${p.line}</span>
+        <h3>${p.name}</h3>
+        <div class="specs">
+          <div><div class="k">Barra</div><div class="v">${p.bar}</div></div>
+          <div><div class="k">Bomba</div><div class="v">${p.pump}</div></div>
+          <div><div class="k">Peso</div><div class="v">${p.weight}</div></div>
+          <div><div class="k">Velocidade</div><div class="v">${p.speed}</div></div>
+        </div>
+      </div>
+      <div class="foot">
+        <a href="#">Ver detalhes
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <span class="price">Sob consulta</span>
+      </div>
+    </article>
+  `).join('');
+}
+renderProducts('all');
+
+document.querySelectorAll('#filters .chip').forEach(c=>{
+  c.addEventListener('click', ()=>{
+    document.querySelectorAll('#filters .chip').forEach(x=>x.setAttribute('aria-pressed','false'));
+    c.setAttribute('aria-pressed','true');
+    renderProducts(c.dataset.f);
+  });
+});
+
+/* ──────────── segmented buttons ──────────── */
+document.querySelectorAll('.seg').forEach(seg=>{
+  seg.addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    update();
+  });
+});
+
+/* ──────────── calculator ──────────── */
+const $area = document.getElementById('area');
+const $apps = document.getElementById('apps');
+const fmtBRL = n => 'R$ ' + Math.round(n).toLocaleString('pt-BR');
+function recommend(area){
+  if(area < 80)   return {n:'Kampo 600 · Barra 10 m',  d:'Tanque 600 L, bomba 75 L/min. Ideal pra hortifruti e pequenas áreas.', m:88, base:38000};
+  if(area < 250)  return {n:'AKVO 800 · Barra 16 m',   d:'Tanque 800 L, bomba 100 L/min. Polivalente e leve no trator.',          m:92, base:78000};
+  if(area < 600)  return {n:'AKVO 1000 · Barra 19 m',  d:'Tanque 1.000 L, bomba 140 L/min. Equilíbrio robustez × tração.',         m:94, base:142000};
+  if(area < 1500) return {n:'AKVO 2000 · Barra 22 m',  d:'Tanque 2.000 L, bomba 150 L/min. Para janelas curtas.',                  m:96, base:268000};
+  return            {n:'AKVO 2500 · Barra 24 m',     d:'Top de linha. Tanque 2.500 L, bomba 150 L/min, eixo Tandem.',             m:98, base:318000};
+}
+function update(){
+  const area = +$area.value, apps = +$apps.value;
+  document.getElementById('area-v').textContent = area.toLocaleString('pt-BR') + ' ha';
+  document.getElementById('apps-v').textContent = apps;
+  const rec = recommend(area);
+  document.getElementById('rec-name').textContent = rec.n;
+  document.getElementById('rec-desc').textContent = rec.d;
+  document.getElementById('rec-match').textContent = rec.m + '%';
+  const invest = rec.base;
+  const save = area * apps * 22;     // economia projetada
+  const pbm = invest / (save/12);
+  const cha = (invest*0.12 + save*0.05) / area;
+  document.getElementById('est-invest').textContent = fmtBRL(invest);
+  document.getElementById('est-save').textContent  = fmtBRL(save);
+  document.getElementById('est-pb').textContent    = Math.max(8,Math.round(pbm)) + ' meses';
+  document.getElementById('est-ha').textContent    = 'R$ ' + cha.toFixed(2).replace('.',',');
+}
+$area.addEventListener('input', update);
+$apps.addEventListener('input', update);
+update();
+
+/* ──────────── lead capture ──────────── */
+document.getElementById('calc-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const name = document.getElementById('lead-name').value.trim();
+  const phone = document.getElementById('lead-phone').value.trim();
+  if(!name || !phone) return;
+  document.getElementById('estimate').classList.add('unlocked');
+  document.getElementById('lead-block').style.display = 'none';
+  document.getElementById('ok-name').textContent = name.split(' ')[0];
+  document.getElementById('ok-phone').textContent = phone;
+  const ok = document.getElementById('success');
+  ok.style.display = 'block';
+  // pretend payload
+  console.log('CRM payload →', { name, phone, area:+$area.value, apps:+$apps.value, recommendation: document.getElementById('rec-name').textContent });
+});
+</script>
+
+</body>
+</html>

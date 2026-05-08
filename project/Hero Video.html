@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tytan — Hero Video</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  html,body{margin:0;padding:0;background:#0b1d12;font-family:'Work Sans',system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:#fff;overflow:hidden}
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="animations.jsx"></script>
+</head>
+<body>
+<div id="root" data-screen-label="00:00"></div>
+
+<script type="text/babel">
+const { useEffect, useRef, useMemo } = React;
+
+/* ── Color tokens ── */
+const C = {
+  ink:'#0b1d12',
+  ink2:'#062013',
+  green:'#003215',
+  copper:'#d97706',
+  copperLight:'#f4b66a',
+  cream:'#f4ead8',
+  white:'#ffffff',
+  outline:'rgba(255,255,255,.18)',
+};
+
+/* ── Cinematic backdrop: image, vignette, grain, grid ── */
+function Backdrop(){
+  const t = useTime();
+  // slow Ken-Burns over the whole 9s
+  const scale = interpolate([0,9],[1.06,1.18], Easing.linear)(t);
+  const tx    = interpolate([0,9],[-12,12], Easing.linear)(t);
+  const ty    = interpolate([0,9],[8,-6], Easing.linear)(t);
+  // sky tint shifts golden -> deep
+  const sky   = interpolate([0,4,9],[.55,.35,.5], Easing.easeInOutSine)(t);
+  return (
+    <div style={{position:'absolute',inset:0,overflow:'hidden',background:C.ink}}>
+      <div style={{
+        position:'absolute',inset:'-6%',
+        backgroundImage:'url(assets/sprayer-field.jpg)',
+        backgroundSize:'cover',backgroundPosition:'center 60%',
+        transform:`translate(${tx}px,${ty}px) scale(${scale})`,
+        filter:'saturate(1.1) contrast(1.05)',
+        willChange:'transform'
+      }}/>
+      {/* sun-bloom from upper right */}
+      <div style={{
+        position:'absolute',inset:0,
+        background:`radial-gradient(40% 60% at 78% 28%, rgba(244,182,106,${sky}) 0%, rgba(217,119,6,.18) 35%, rgba(11,29,18,0) 70%)`,
+        mixBlendMode:'screen'
+      }}/>
+      {/* bottom vignette to seat type */}
+      <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg, rgba(11,29,18,0) 0%, rgba(11,29,18,.15) 45%, rgba(11,29,18,.85) 100%)'}}/>
+      {/* left soft edge for headline legibility */}
+      <div style={{position:'absolute',inset:0,background:'linear-gradient(90deg, rgba(6,32,19,.78) 0%, rgba(6,32,19,.30) 38%, rgba(6,32,19,0) 60%)'}}/>
+      {/* metallic tech grid */}
+      <div style={{
+        position:'absolute',inset:0,opacity:.18,
+        backgroundImage:'linear-gradient(0deg, rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)',
+        backgroundSize:'72px 72px',
+        maskImage:'radial-gradient(ellipse at center, #000 30%, transparent 80%)',
+        WebkitMaskImage:'radial-gradient(ellipse at center, #000 30%, transparent 80%)'
+      }}/>
+      {/* film grain */}
+      <div style={{
+        position:'absolute',inset:0,pointerEvents:'none',opacity:.12,mixBlendMode:'overlay',
+        backgroundImage:`url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.7'/></svg>")`
+      }}/>
+    </div>
+  );
+}
+
+/* ── Drifting dust motes ── */
+function Dust(){
+  const t = useTime();
+  const motes = useMemo(()=>Array.from({length:34},(_,i)=>({
+    x: (i*97)%1920,
+    y: 80 + ((i*53)%900),
+    s: 2 + ((i*7)%6),
+    d: 7 + ((i*3)%6),
+    o: .25 + ((i*11)%30)/100,
+    ph: (i*0.71)%1
+  })),[]);
+  return (
+    <div style={{position:'absolute',inset:0,pointerEvents:'none'}}>
+      {motes.map((m,i)=>{
+        const k = ((t/m.d)+m.ph)%1;
+        const x = m.x - k*220;             // drift left
+        const y = m.y + Math.sin((t+m.ph*6)*1.2)*18;
+        const op = m.o * (k<.1?k*10:k>.85?(1-k)*7:1);
+        return <div key={i} style={{
+          position:'absolute',left:x,top:y,width:m.s,height:m.s,borderRadius:'50%',
+          background:'#f4b66a', boxShadow:'0 0 8px rgba(244,182,106,.7)',opacity:op
+        }}/>;
+      })}
+    </div>
+  );
+}
+
+/* ── Top chrome: kicker bar that wipes in ── */
+function Chrome(){
+  const t = useTime();
+  const wipe = animate({from:0,to:1,start:.15,end:1.0,ease:Easing.easeOutQuart})(t);
+  const op   = animate({from:0,to:1,start:.15,end:.6})(t);
+  return (
+    <div style={{position:'absolute',top:56,left:96,right:96,display:'flex',alignItems:'center',justifyContent:'space-between',opacity:op}}>
+      <div style={{display:'flex',alignItems:'center',gap:20}}>
+        <div style={{width:wipe*72,height:2,background:C.copper,boxShadow:`0 0 12px ${C.copper}`}}/>
+        <div style={{
+          fontFamily:'Montserrat',fontWeight:800,fontSize:18,letterSpacing:'.34em',
+          color:C.white,opacity:wipe
+        }}>TYTAN&nbsp;&nbsp;AGRICULTURE</div>
+      </div>
+      <div style={{
+        display:'flex',gap:24,alignItems:'center',
+        fontFamily:'Work Sans',fontSize:12,letterSpacing:'.22em',textTransform:'uppercase',
+        color:'rgba(255,255,255,.7)',fontWeight:600,opacity:wipe
+      }}>
+        <span>SAFRA 25/26</span>
+        <span style={{width:4,height:4,borderRadius:'50%',background:C.copper}}/>
+        <span>BR · AR · PY · BO</span>
+      </div>
+    </div>
+  );
+}
+
+/* ── Headline: word-by-word reveal ── */
+function Headline(){
+  const t = useTime();
+  // word reveals at 2.4, 2.7, 3.0, 3.3, 3.6
+  const words = [
+    {w:'PRECISÃO',  s:2.40, copper:false},
+    {w:'QUE',       s:2.65, copper:false},
+    {w:'MOVIMENTA', s:2.95, copper:true},
+    {w:'A',         s:3.40, copper:false},
+    {w:'SAFRA.',    s:3.60, copper:false},
+  ];
+  return (
+    <div style={{
+      position:'absolute',left:96,bottom:340,maxWidth:1480,
+      fontFamily:'Montserrat, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif',fontWeight:800,fontSize:124,lineHeight:.95,
+      letterSpacing:'-.025em',color:C.white,
+      display:'flex',flexWrap:'wrap',gap:'4px 24px'
+    }}>
+      {words.map((it,i)=>{
+        const local = clampx((t-it.s)/.55, 0, 1);
+        const ease = Easing.easeOutQuart(local);
+        const op = ease;
+        const ty = (1-ease)*42;
+        const blur = (1-ease)*8;
+        return (
+          <span key={i} style={{
+            display:'inline-block',
+            color: it.copper ? C.copper : C.white,
+            opacity:op,
+            transform:`translateY(${ty}px)`,
+            filter:`blur(${blur}px)`,
+            textShadow: it.copper ? '0 4px 30px rgba(217,119,6,.45)' : '0 4px 24px rgba(0,0,0,.4)',
+            willChange:'transform, opacity, filter'
+          }}>{it.w}</span>
+        );
+      })}
+    </div>
+  );
+}
+const clampx = (v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ── Subline + CTAs ── */
+function SubAndCTA(){
+  const t = useTime();
+  const opSub = animate({from:0,to:1,start:4.4,end:5.0,ease:Easing.easeOutCubic})(t);
+  const tySub = animate({from:18,to:0,start:4.4,end:5.0,ease:Easing.easeOutCubic})(t);
+  const opCta = animate({from:0,to:1,start:5.1,end:5.7,ease:Easing.easeOutCubic})(t);
+  const tyCta = animate({from:14,to:0,start:5.1,end:5.7,ease:Easing.easeOutCubic})(t);
+  // copper pulse
+  const pulse = .92 + .08*Math.sin((t-5.7)*4);
+  return (
+    <div style={{position:'absolute',left:96,bottom:96,right:560}}>
+      <div style={{
+        opacity:opSub,transform:`translateY(${tySub}px)`,
+        fontFamily:'Work Sans, system-ui, -apple-system, sans-serif',fontWeight:300,fontSize:22,lineHeight:1.45,
+        color:'rgba(244,234,216,.92)',maxWidth:720,marginBottom:24,letterSpacing:'.005em'
+      }}>
+        Pulverizadores fabricados para <b style={{fontWeight:600,color:C.white}}>cada hectare</b> do seu campo —
+        do hortifruti à barra de 24 metros.
+      </div>
+      <div style={{
+        display:'flex',gap:14,opacity:opCta,transform:`translateY(${tyCta}px)`
+      }}>
+        <div style={{
+          background:C.copper,color:C.white,padding:'18px 28px',
+          fontFamily:'Montserrat, system-ui, sans-serif',fontWeight:700,fontSize:14,letterSpacing:'.14em',textTransform:'uppercase',
+          borderRadius:4, transform:`scale(${t>5.7?pulse:1})`,
+          boxShadow:'0 12px 36px rgba(217,119,6,.4)',display:'inline-flex',alignItems:'center',gap:12
+        }}>
+          Solicitar orçamento
+          <span style={{fontSize:18,lineHeight:1}}>→</span>
+        </div>
+        <div style={{
+          background:'transparent',color:C.white,padding:'18px 28px',
+          fontFamily:'Montserrat, system-ui, sans-serif',fontWeight:700,fontSize:14,letterSpacing:'.14em',textTransform:'uppercase',
+          border:`1.5px solid rgba(255,255,255,.55)`,borderRadius:4
+        }}>Calcular economia</div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Floating stat cards ── */
+function StatCard({label, value, unit, x, y, start}){
+  const t = useTime();
+  const local = clampx((t-start)/.55, 0, 1);
+  const e = Easing.easeOutBack(local);
+  const op = clampx((t-start)/.4, 0, 1);
+  const float = Math.sin((t-start)*1.6)*4;
+  return (
+    <div style={{
+      position:'absolute',left:x,top:y+ (1-e)*30 + float,
+      opacity:op,transform:`scale(${.85+.15*e})`,transformOrigin:'center',
+      background:'rgba(11,29,18,.62)',backdropFilter:'blur(12px)',WebkitBackdropFilter:'blur(12px)',
+      border:'1px solid rgba(244,234,216,.22)',
+      borderRadius:6,padding:'14px 18px',minWidth:172,
+      willChange:'transform, opacity'
+    }}>
+      <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:6}}>
+        <span style={{width:6,height:6,borderRadius:'50%',background:C.copper,boxShadow:`0 0 8px ${C.copper}`}}/>
+        <span style={{fontFamily:'Work Sans',fontSize:10,letterSpacing:'.2em',textTransform:'uppercase',color:'rgba(244,234,216,.7)',fontWeight:700}}>{label}</span>
+      </div>
+      <div style={{fontFamily:'Montserrat',fontWeight:800,fontSize:28,color:C.white,letterSpacing:'-.01em',lineHeight:1}}>
+        {value}<span style={{fontSize:14,color:C.copperLight,marginLeft:6,fontWeight:700,letterSpacing:'.02em'}}>{unit}</span>
+      </div>
+    </div>
+  );
+}
+
+function Stats(){
+  return (
+    <>
+      <StatCard label="TANQUE"    value="2.500" unit="L"     x={1500} y={140} start={5.4}/>
+      <StatCard label="BARRA"     value="24"    unit="M"     x={1700} y={250} start={5.7}/>
+      <StatCard label="VAZÃO"     value="150"   unit="L/MIN" x={1500} y={360} start={6.0}/>
+      <StatCard label="PAYBACK"   value="22"    unit="MESES" x={1700} y={470} start={6.3}/>
+    </>
+  );
+}
+
+/* ── Bottom ticker / scarcity strip ── */
+function Ticker(){
+  const t = useTime();
+  const op = animate({from:0,to:1,start:6.6,end:7.2,ease:Easing.easeOutCubic})(t);
+  const items = ['CONDIÇÃO ESPECIAL · 10 PRIMEIROS DO MÊS','VÁLIDO PARA SAFRA 25/26','BNDES FINAME · PLANO SAFRA','GARANTIA 24 MESES','BR · AR · PY · BO'];
+  // scrolling
+  const offset = ((t-6.6)*60)%600;
+  return (
+    <div style={{position:'absolute',left:0,right:0,bottom:0,height:44,overflow:'hidden',background:C.copper,opacity:op,display:'flex',alignItems:'center'}}>
+      <div style={{
+        display:'flex',gap:48,whiteSpace:'nowrap',
+        transform:`translateX(${-offset}px)`,
+        fontFamily:'Montserrat, system-ui, sans-serif',fontWeight:700,fontSize:13,letterSpacing:'.2em',textTransform:'uppercase',color:'#fff'
+      }}>
+        {[...items,...items,...items].map((s,i)=>(
+          <span key={i} style={{display:'inline-flex',alignItems:'center',gap:48}}>
+            {s}
+            <span style={{width:5,height:5,borderRadius:'50%',background:'rgba(255,255,255,.55)'}}/>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Lens flare sweep at headline reveal ── */
+function FlareSweep(){
+  const t = useTime();
+  if (t < 2.2 || t > 4.4) return null;
+  const k = clampx((t-2.2)/2.2, 0, 1);
+  const x = -300 + k*2400;
+  return (
+    <div style={{position:'absolute',inset:0,pointerEvents:'none',overflow:'hidden'}}>
+      <div style={{
+        position:'absolute',top:-40,bottom:-40,left:x,width:280,
+        background:'linear-gradient(90deg, rgba(244,182,106,0) 0%, rgba(244,182,106,.45) 40%, rgba(255,255,255,.7) 50%, rgba(244,182,106,.45) 60%, rgba(244,182,106,0) 100%)',
+        filter:'blur(14px)',transform:'skewX(-18deg)',mixBlendMode:'screen'
+      }}/>
+    </div>
+  );
+}
+
+/* ── timestamp label updater ── */
+function TimestampTag(){
+  const t = useTime();
+  useEffect(()=>{
+    const sec = Math.floor(t);
+    const root = document.getElementById('root');
+    if (root) root.setAttribute('data-screen-label', `00:0${sec}`.slice(-5));
+  }, [Math.floor(t)]);
+  return null;
+}
+
+/* ── Scene composition ── */
+function Scene(){
+  return (
+    <>
+      <Backdrop/>
+      <Dust/>
+      <FlareSweep/>
+      <Chrome/>
+      <Stats/>
+      <Headline/>
+      <SubAndCTA/>
+      <Ticker/>
+      <TimestampTag/>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <Stage width={1920} height={1080} duration={9} background={C.ink} loop={true}>
+    <Scene/>
+  </Stage>
+);
+</script>
+</body>
+</html>
