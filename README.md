@@ -1,25 +1,29 @@
-# CODING AGENTS: READ THIS FIRST
+# Integração n8n → Google Sheets
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+Arquivos de referência para adicionar captura de leads via n8n no projeto Lovable (`tytan-precision-sprayers`).
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+## Arquivos
 
-## What you should do — IMPORTANT
+| Arquivo | O que faz |
+|---|---|
+| `src/types/lead.ts` | Interface `Lead` |
+| `src/services/n8n.ts` | `sendLead()` — envia dados ao webhook n8n |
+| `src/components/ContactForm.tsx` | Formulário com validação (shadcn/ui + zod) |
+| `.env.example` | Variável de ambiente com a URL do webhook |
 
-**Read the chat transcripts first.** There are 1 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+## Como adicionar ao projeto Lovable
 
-**Read `project/Landing Page-print.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+1. Copie os 3 arquivos de `src/` para o mesmo caminho no projeto Lovable.
+2. No rodapé ou seção de contato, importe e use `<ContactForm />`.
+3. Adicione `VITE_N8N_WEBHOOK_URL` nas variáveis de ambiente do Lovable.
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+## Configuração n8n
 
-## About the design files
-
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
-
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
-
-## Bundle contents
-
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `Tytan` project files (HTML prototypes, assets, components)
+1. Crie um workflow com nó **Webhook** (método POST).
+2. Copie a URL gerada → cole como `VITE_N8N_WEBHOOK_URL`.
+3. Adicione nó **Google Sheets → Append Row**:
+   - `nome` → `{{ $json.name }}`
+   - `email` → `{{ $json.email }}`
+   - `telefone` → `{{ $json.phone }}`
+   - `data` → `{{ $json.timestamp }}`
+4. Ative o workflow.
